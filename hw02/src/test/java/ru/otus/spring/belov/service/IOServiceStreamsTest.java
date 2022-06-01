@@ -6,27 +6,36 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @DisplayName("Тест сервиса комуникации с пользователем")
-class UserCommunicationServiceImplTest {
+class IOServiceStreamsTest {
 
     @Test
     @SneakyThrows
     @DisplayName("Тест считывания ответа пользователя из консоли")
     public void readAnswerTest() {
         String answers = "test input";
-        InputStream stdin = System.in;
         try (ByteArrayInputStream bais = new ByteArrayInputStream(answers.getBytes())) {
-            System.setIn(bais);
-            UserCommunicationServiceImpl service = new UserCommunicationServiceImpl();
+            IOServiceStreams service = new IOServiceStreams(null, null, bais);
             String answer = service.readAnswer();
             assertEquals(answers, answer, "Ответы не совпадают");
-        } finally {
-            System.setIn(stdin);
+        }
+    }
+
+    @Test
+    @SneakyThrows
+    @DisplayName("Тест считывания числового ответа. Проверяет что если не цифра, заставляем считывать ещё раз")
+    public void readIntAnswerTest() {
+        String answers = "test\ninput\nt\nsd\ngg\n1";
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(answers.getBytes())) {
+            IOServiceStreams service = spy(new IOServiceStreams(null, System.out, bais));
+            int answer = service.readIntAnswer();
+            assertEquals(1, answer, "Ответы не совпадают");
+            verify(service, times(6)).readIntAnswer();
         }
     }
 
@@ -35,15 +44,11 @@ class UserCommunicationServiceImplTest {
     @DisplayName("Тест вывода сообщения пользователю в консоль")
     public void printTest() {
         String message = "test message";
-        PrintStream originalPrintStream = System.out;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              PrintStream printStream = new PrintStream(baos)) {
-            System.setOut(printStream);
-            UserCommunicationServiceImpl service = new UserCommunicationServiceImpl();
+            IOServiceStreams service = new IOServiceStreams(printStream, null, System.in);
             service.print(message);
             assertEquals(message, baos.toString().trim());
-        } finally {
-            System.setOut(originalPrintStream);
         }
     }
 
@@ -52,15 +57,11 @@ class UserCommunicationServiceImplTest {
     @DisplayName("Тест вывода сообщения пользователю в консоль")
     public void printErrorTest() {
         String message = "test message";
-        PrintStream originalPrintStream = System.err;
         try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
              PrintStream printStream = new PrintStream(baos)) {
-            System.setErr(printStream);
-            UserCommunicationServiceImpl service = new UserCommunicationServiceImpl();
+            IOServiceStreams service = new IOServiceStreams(null, printStream, System.in);
             service.printError(message);
             assertEquals(message, baos.toString().trim());
-        } finally {
-            System.setErr(originalPrintStream);
         }
     }
 }

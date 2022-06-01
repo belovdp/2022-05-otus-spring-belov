@@ -14,8 +14,6 @@ import java.util.List;
 @Getter
 @RequiredArgsConstructor
 public class Exam {
-    /** Вопросы */
-    private final List<Question> questions;
     /** Количество правильных ответов, требуемых для выполнения экзамена */
     private final int requiredRightAnswers;
     /** Признак необходимости перемешивать вопросы */
@@ -24,6 +22,8 @@ public class Exam {
     private final int questionAttempts;
      /** Пользователь */
     private User user;
+    /** Вопросы */
+    private List<Question> questions;
     /** Ответы */
     private final List<Answer> answers = new ArrayList<>();
 

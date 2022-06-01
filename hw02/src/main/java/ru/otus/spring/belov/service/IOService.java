@@ -1,15 +1,20 @@
 package ru.otus.spring.belov.service;
 
 /**
- * Кронтракт на взаимодействие с пользователем
+ * Сервис ввода вывода информации
  */
-public interface UserCommunicationService {
+public interface IOService {
 
     /**
      * Выводит сообщение пользователю
      * @param message сообщение
      */
     void print(String message);
+
+    /**
+     * Выводит разделитель
+     */
+    void printDelimiter();
 
     /**
      * Выводит сообщение с ошибкой пользователю
@@ -22,4 +27,10 @@ public interface UserCommunicationService {
      * @return ответ пользователя
      */
     String readAnswer();
+
+    /**
+     * Считывает числовой ответ пользователя
+     * @return числовой ответ пользователя
+     */
+    int readIntAnswer();
 }
