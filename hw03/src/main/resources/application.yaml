@@ -1,0 +1,6 @@
+exam-app:
+  filename: /questions.csv
+  required-right-answers: 3
+  question-attempts: 2
+  shuffle-answers: true
+  locale: "RU"
