@@ -3,4 +3,9 @@ exam-app:
   required-right-answers: 3
   question-attempts: 1
   shuffle-answers: false
-  locale: "RU"
+  locales:
+    - ru
+    - en
+spring:
+  messages:
+    fallback-to-system-locale: false

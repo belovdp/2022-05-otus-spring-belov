@@ -2,12 +2,13 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.domain.Answer;
 import ru.otus.spring.belov.domain.Exam;
 import ru.otus.spring.belov.domain.Question;
 import ru.otus.spring.belov.domain.User;
 
-import static java.text.MessageFormat.format;
+import java.util.Locale;
 
 /**
  * Класс для взаимодействие с пользователем через консоль
@@ -18,12 +19,25 @@ public class ConsoleCommunicationService implements CommunicationService {
 
     /** Сервис ввода вывода информации */
     private final IOService ioService;
+    /** Компонент локализаци */
+    private final MessageService messageService;
+    /** Настройки приложения */
+    private final ExamAppProperties examAppProperties;
+
+    @Override
+    public Locale chooseLocale() {
+        ioService.print(messageService.getMessage("locale.choose"));
+        for (var answerIndex = 0; answerIndex < examAppProperties.getLocales().size(); answerIndex++) {
+            ioService.print(messageService.getMessage("exam.chooser_pattern", answerIndex, examAppProperties.getLocales().get(answerIndex)));
+        }
+        return examAppProperties.getLocales().get(ioService.readIntAnswer());
+    }
 
     @Override
     public User getUserInfo() {
-        ioService.print("Enter your name");
+        ioService.print(messageService.getMessage("exam.user.enter_name"));
         var firstName = ioService.readAnswer();
-        ioService.print("Enter your last name");
+        ioService.print(messageService.getMessage("exam.user.enter_last_name"));
         var lastName = ioService.readAnswer();
         return new User(firstName, lastName);
     }
@@ -31,14 +45,14 @@ public class ConsoleCommunicationService implements CommunicationService {
     @Override
     public void askQuestion(Question question, boolean shuffle) {
         ioService.printDelimiter();
-        ioService.print("Question: " + question.getQuestion());
-        ioService.print("Answers:");
+        ioService.print(messageService.getMessage("exam.question") + question.getQuestion());
+        ioService.print(messageService.getMessage("exam.question.answers"));
         if (shuffle) {
             question.shuffleAnswers();
         }
         for (var answerIndex = 0; answerIndex < question.getAnswers().size(); answerIndex++) {
-            String answer = question.getAnswers().get(answerIndex);
-            ioService.print(format("{0} - {1}", answerIndex, answer));
+            var answer = question.getAnswers().get(answerIndex);
+            ioService.print(messageService.getMessage("exam.chooser_pattern", answerIndex, answer));
         }
     }
 
@@ -47,7 +61,7 @@ public class ConsoleCommunicationService implements CommunicationService {
         var answer = readAnswer(question);
         if (question.getRightAnswerIndex() != answer && 1 < attempts) {
             attempts--;
-            ioService.printError(format("Wrong. Remaining attempts: {0}. Try again...", attempts));
+            ioService.printError(messageService.getMessage("exam.answer.try_again", attempts));
             return getAnswer(question, attempts);
         }
         return new Answer(question, answer);
@@ -61,11 +75,11 @@ public class ConsoleCommunicationService implements CommunicationService {
      * @return ответ пользователя в виде цифры
      */
     private int readAnswer(Question question) {
-        ioService.print("Your answer:");
+        ioService.print(messageService.getMessage("exam.answer.write"));
         var answer = ioService.readIntAnswer();
         var answersCount = question.getAnswers().size();
         if (answersCount - 1 < answer || answer < 0) {
-            ioService.printError(format("The answer should be in the range from 0 to {0}. Try again", answersCount - 1));
+            ioService.printError(messageService.getMessage("exam.answer.incorrect", answersCount - 1));
             return readAnswer(question);
         }
         return answer;
@@ -74,12 +88,12 @@ public class ConsoleCommunicationService implements CommunicationService {
     @Override
     public void printResult(Exam exam) {
         ioService.printDelimiter();
-        ioService.print(format("User: {0} {1}", exam.getUser().getFirstName(), exam.getUser().getLastName()));
-        ioService.print(format("Right answers: {0}/{1}", exam.getRightAnswersCount(), exam.getQuestions().size()));
+        ioService.print(messageService.getMessage("exam.result.user", exam.getUser().getFirstName(), exam.getUser().getLastName()));
+        ioService.print(messageService.getMessage("exam.result.answers", exam.getRightAnswersCount(), exam.getQuestions().size()));
         if (exam.isExamPassed()) {
-            ioService.print("PASSED");
+            ioService.print(messageService.getMessage("exam.result.passed"));
         } else {
-            ioService.printError("NOT PASSED");
+            ioService.printError(messageService.getMessage("exam.result.not_passed"));
         }
     }
 }

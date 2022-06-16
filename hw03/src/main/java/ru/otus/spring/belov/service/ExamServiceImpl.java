@@ -1,5 +1,6 @@
 package ru.otus.spring.belov.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.dao.QuestionDao;
@@ -8,6 +9,7 @@ import ru.otus.spring.belov.domain.Exam;
 /**
  * Сервис проведения экзамена
  */
+@RequiredArgsConstructor
 @Service
 public class ExamServiceImpl implements ExamService {
 
@@ -17,23 +19,13 @@ public class ExamServiceImpl implements ExamService {
     private final CommunicationService communicationService;
     /** Настройки экзамена */
     private final ExamAppProperties examAppProperties;
-
-    /**
-     * Конструктор
-     * @param questionDao          DAO по работе с вопросами
-     * @param communicationService сервис по взаимодействию с пользователем
-     * @param examAppProperties    настройки экзамена
-     */
-    public ExamServiceImpl(QuestionDao questionDao,
-                           CommunicationService communicationService,
-                           ExamAppProperties examAppProperties) {
-        this.questionDao = questionDao;
-        this.communicationService = communicationService;
-        this.examAppProperties = examAppProperties;
-    }
+    /** Сервис сообщений */
+    private final MessageService messageService;
 
     @Override
     public Exam executeExam() {
+        var locale = communicationService.chooseLocale();
+        messageService.changeLocale(locale);
         var exam = new Exam(examAppProperties.getRequiredRightAnswers(), examAppProperties.isShuffleAnswers(), examAppProperties.getQuestionAttempts());
         exam.setQuestions(questionDao.findAll());
         exam.setUser(communicationService.getUserInfo());

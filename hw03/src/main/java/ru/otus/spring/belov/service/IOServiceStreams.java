@@ -15,16 +15,20 @@ public class IOServiceStreams implements IOService {
     private final PrintStream errorOutput;
     /** Поток ввода */
     private final Scanner input;
+    /** Компонент локализаци */
+    private final MessageService messageService;
 
     /**
      * Конструктор
-     * @param output      поток вывода информации
-     * @param errorOutput поток вывода информации с ошибками
-     * @param input       поток ввода
+     * @param output         поток вывода информации
+     * @param errorOutput    поток вывода информации с ошибками
+     * @param input          поток ввода
+     * @param messageService сервис работы с сообщениями
      */
-    public IOServiceStreams(PrintStream output, PrintStream errorOutput, InputStream input) {
+    public IOServiceStreams(PrintStream output, PrintStream errorOutput, InputStream input, MessageService messageService) {
         this.output = output;
         this.errorOutput = errorOutput;
+        this.messageService = messageService;
         this.input = new Scanner(input);
     }
 
@@ -53,7 +57,7 @@ public class IOServiceStreams implements IOService {
         try {
             return Integer.parseInt(readAnswer());
         } catch (NumberFormatException numberFormatException) {
-            printError("You must specify a number. Try again...");
+            printError(messageService.getMessage("exam.answer.read_int"));
             return readIntAnswer();
         }
     }

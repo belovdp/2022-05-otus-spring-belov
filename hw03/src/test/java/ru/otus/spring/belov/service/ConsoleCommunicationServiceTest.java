@@ -27,6 +27,8 @@ import static org.mockito.Mockito.*;
 class ConsoleCommunicationServiceTest {
 
     @MockBean
+    private MessageService messageService;
+    @MockBean
     private IOService ioService;
     @SpyBean
     private CommunicationService communicationService;
@@ -83,6 +85,7 @@ class ConsoleCommunicationServiceTest {
             "5, true",
     })
     void printResultTest(int rightAnswer, boolean isPassed) {
+        when(messageService.getMessage(anyString(), any())).thenReturn("");
         var exam = new Exam(3, false, 1);
         exam.setUser(new User("sdf", "ggg"));
         exam.setQuestions(new ArrayList<>());

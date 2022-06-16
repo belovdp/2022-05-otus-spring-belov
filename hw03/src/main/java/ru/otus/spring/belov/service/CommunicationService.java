@@ -5,6 +5,8 @@ import ru.otus.spring.belov.domain.Exam;
 import ru.otus.spring.belov.domain.Question;
 import ru.otus.spring.belov.domain.User;
 
+import java.util.Locale;
+
 /**
  * Кронтракт на взаимодействие с пользователем
  */
@@ -37,4 +39,10 @@ public interface CommunicationService {
      * @param exam экзамен
      */
     void printResult(Exam exam);
+
+    /**
+     * Возвращает выбранную пользователем локаль
+     * @return локаль
+     */
+    Locale chooseLocale();
 }

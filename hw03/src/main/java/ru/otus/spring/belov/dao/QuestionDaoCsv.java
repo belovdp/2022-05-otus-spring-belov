@@ -1,18 +1,15 @@
 package ru.otus.spring.belov.dao;
 
 import com.opencsv.bean.CsvToBeanBuilder;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.domain.Question;
+import ru.otus.spring.belov.service.MessageService;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.List;
 import java.util.Objects;
-
-import static java.text.MessageFormat.format;
 
 /**
  * DAO по работе с вопросами тестирования
@@ -26,13 +23,17 @@ public class QuestionDaoCsv implements QuestionDao {
     private static final char CSV_SEPARATOR = ';';
     /** Путь до ресурса, содержащего вопросы для тестирвания */
     private final String scvResourcePath;
+    /** Компонент локализаци */
+    private final MessageService messageService;
 
     /**
      * Конструктор
      * @param examAppProperties настройки приложения
+     * @param messageService    сервис работы с сообщениями
      */
-    public QuestionDaoCsv(ExamAppProperties examAppProperties) {
+    public QuestionDaoCsv(ExamAppProperties examAppProperties, MessageService messageService) {
         this.scvResourcePath = examAppProperties.getFilename();
+        this.messageService = messageService;
     }
 
     @Override
@@ -46,7 +47,7 @@ public class QuestionDaoCsv implements QuestionDao {
             validateQuestions(questions);
             return questions;
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка чтения вопросника", e);
+            throw new RuntimeException(messageService.getMessage("error.dao.cant_read"), e);
         }
     }
 
@@ -58,10 +59,10 @@ public class QuestionDaoCsv implements QuestionDao {
     private void validateQuestions(List<Question> questions) {
         questions.forEach(question -> {
             if (question.getAnswers() == null || question.getAnswers().size() < 2) {
-                throw new IllegalStateException(format("У вопроса \"{0}\" должно быть несколько вариантов ответа", question.getQuestion()));
+                throw new IllegalStateException(messageService.getMessage("error.dao.need_more_answers", question.getQuestion()));
             }
             if (question.getAnswers().size() - 1 < question.getRightAnswerIndex()) {
-                throw new IllegalStateException(format("У вопроса \"{0}\" указан неверный ответ", question.getQuestion()));
+                throw new IllegalStateException(messageService.getMessage("error.dao.invalid_answer", question.getQuestion()));
             }
         });
     }

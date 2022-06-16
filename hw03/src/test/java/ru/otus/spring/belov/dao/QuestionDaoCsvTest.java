@@ -11,26 +11,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
-import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.domain.Question;
+import ru.otus.spring.belov.service.MessageService;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @DisplayName("Тест чтения csv файла с вопросами")
 @SpringBootTest
 class QuestionDaoCsvTest {
 
+    @MockBean
+    private MessageService messageService;
     @Autowired
     private QuestionDaoCsv daoCsv;
 
     @Test
     @DisplayName("Тест чтения вопросов с валидного файла")
     void testOk() {
-        ReflectionTestUtils.setField(daoCsv, "scvResourcePath", "/questionsOk.csv");
         var questions = daoCsv.findAll();
         assertEquals(5, questions.size(), "Неверное количество записей");
         var question = questions.get(2);
@@ -60,8 +60,6 @@ class QuestionDaoCsvTest {
     @DisplayName("Тест валидации вопросов")
     @MethodSource("validateTestData")
     void validateTest(Question question, boolean isValid) {
-        var appProperties = new ExamAppProperties(null, 1, 1, false);
-        var daoCsv = new QuestionDaoCsv(appProperties);
         if (isValid) {
             ReflectionTestUtils.invokeMethod(daoCsv, "validateQuestions", List.of(question));
         } else {
