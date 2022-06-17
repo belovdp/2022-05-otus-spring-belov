@@ -38,7 +38,8 @@ public class QuestionDaoCsv implements QuestionDao {
 
     @Override
     public List<Question> findAll() {
-        try (var reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream(scvResourcePath), "Не найден файл с вопросами"))) {
+        var resourcePath = "/questions_" + messageService.getLocale() + "/" + scvResourcePath;
+        try (var reader = new InputStreamReader(Objects.requireNonNull(this.getClass().getResourceAsStream(resourcePath), "Не найден файл с вопросами"))) {
             var questions = new CsvToBeanBuilder<Question>(reader)
                     .withType(Question.class)
                     .withSeparator(CSV_SEPARATOR)

@@ -1,6 +1,7 @@
 package ru.otus.spring.belov.dao;
 
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,9 +16,11 @@ import ru.otus.spring.belov.domain.Question;
 import ru.otus.spring.belov.service.MessageService;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Тест чтения csv файла с вопросами")
 @SpringBootTest
@@ -27,6 +30,11 @@ class QuestionDaoCsvTest {
     private MessageService messageService;
     @Autowired
     private QuestionDaoCsv daoCsv;
+
+    @BeforeEach
+    void init() {
+        when(messageService.getLocale()).thenReturn(new Locale("en"));
+    }
 
     @Test
     @DisplayName("Тест чтения вопросов с валидного файла")
@@ -44,7 +52,7 @@ class QuestionDaoCsvTest {
 
     @DisplayName("Тест на проверку обязательных полей")
     @ParameterizedTest(name = "Файл {0}")
-    @ValueSource(strings = {"/requiredQuestion.csv", "/requiredRightAnswer.csv"})
+    @ValueSource(strings = {"requiredQuestion.csv", "requiredRightAnswer.csv"})
     void testRequiredFields(String resourceName) {
         ReflectionTestUtils.setField(daoCsv, "scvResourcePath", resourceName);
         var e = assertThrows(RuntimeException.class, daoCsv::findAll, "Ожидается ошибка о том что не заполнено обязательное поле");

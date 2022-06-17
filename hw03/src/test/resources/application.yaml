@@ -4,8 +4,8 @@ exam-app:
   question-attempts: 1
   shuffle-answers: false
   locales:
-    - ru
     - en
+    - ru
 spring:
   messages:
     fallback-to-system-locale: false

@@ -28,6 +28,8 @@ class ExamServiceImplTest {
     private CommunicationService communicationService;
     @MockBean
     private ExamAppProperties examAppProperties;
+    @MockBean
+    private MessageService messageService;
     @Autowired
     private ExamServiceImpl examService;
 
