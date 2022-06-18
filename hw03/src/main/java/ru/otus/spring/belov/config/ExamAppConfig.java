@@ -13,7 +13,7 @@ import ru.otus.spring.belov.service.MessageService;
 public class ExamAppConfig {
 
     @Bean
-    public IOService getIOService(MessageService messageService) {
+    public IOService ioService(MessageService messageService) {
         return new IOServiceStreams(System.out, System.err, System.in, messageService);
     }
 }

@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import ru.otus.spring.belov.component.LocaleHolder;
 import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.dao.QuestionDao;
 import ru.otus.spring.belov.domain.Answer;
@@ -29,7 +30,7 @@ class ExamServiceImplTest {
     @MockBean
     private ExamAppProperties examAppProperties;
     @MockBean
-    private MessageService messageService;
+    private LocaleHolder localeHolder;
     @Autowired
     private ExamServiceImpl examService;
 

@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
+import ru.otus.spring.belov.component.LocaleHolder;
 import ru.otus.spring.belov.domain.Question;
-import ru.otus.spring.belov.service.MessageService;
 
 import java.util.List;
 import java.util.Locale;
@@ -27,13 +27,13 @@ import static org.mockito.Mockito.when;
 class QuestionDaoCsvTest {
 
     @MockBean
-    private MessageService messageService;
+    private LocaleHolder localeHolder;
     @Autowired
     private QuestionDaoCsv daoCsv;
 
     @BeforeEach
     void init() {
-        when(messageService.getLocale()).thenReturn(new Locale("en"));
+        when(localeHolder.getLocale()).thenReturn(Locale.ENGLISH);
     }
 
     @Test
@@ -54,7 +54,7 @@ class QuestionDaoCsvTest {
     @ParameterizedTest(name = "Файл {0}")
     @ValueSource(strings = {"requiredQuestion.csv", "requiredRightAnswer.csv"})
     void testRequiredFields(String resourceName) {
-        ReflectionTestUtils.setField(daoCsv, "scvResourcePath", resourceName);
+        ReflectionTestUtils.setField(daoCsv, "csvResourceName", resourceName);
         var e = assertThrows(RuntimeException.class, daoCsv::findAll, "Ожидается ошибка о том что не заполнено обязательное поле");
         assertEquals(CsvRequiredFieldEmptyException.class, e.getCause().getClass(), "Ожидается другая ошибка");
     }
