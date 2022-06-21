@@ -2,13 +2,9 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.domain.Answer;
 import ru.otus.spring.belov.domain.Exam;
 import ru.otus.spring.belov.domain.Question;
-import ru.otus.spring.belov.domain.User;
-
-import java.util.Locale;
 
 /**
  * Класс для взаимодействие с пользователем через консоль
@@ -21,26 +17,6 @@ public class ConsoleCommunicationService implements CommunicationService {
     private final IOService ioService;
     /** Компонент локализаци */
     private final MessageService messageService;
-    /** Настройки приложения */
-    private final ExamAppProperties examAppProperties;
-
-    @Override
-    public Locale chooseLocale() {
-        ioService.print(messageService.getMessage("locale.choose"));
-        for (var answerIndex = 0; answerIndex < examAppProperties.getLocales().size(); answerIndex++) {
-            ioService.print(messageService.getMessage("exam.chooser_pattern", answerIndex, examAppProperties.getLocales().get(answerIndex)));
-        }
-        return examAppProperties.getLocales().get(ioService.readIntAnswer());
-    }
-
-    @Override
-    public User getUserInfo() {
-        ioService.print(messageService.getMessage("exam.user.enter_name"));
-        var firstName = ioService.readAnswer();
-        ioService.print(messageService.getMessage("exam.user.enter_last_name"));
-        var lastName = ioService.readAnswer();
-        return new User(firstName, lastName);
-    }
 
     @Override
     public void askQuestion(Question question, boolean shuffle) {
@@ -67,6 +43,18 @@ public class ConsoleCommunicationService implements CommunicationService {
         return new Answer(question, answer);
     }
 
+    @Override
+    public void printResult(Exam exam) {
+        ioService.printDelimiter();
+        ioService.print(messageService.getMessage("exam.result.user", exam.getUser().getFirstName(), exam.getUser().getLastName()));
+        ioService.print(messageService.getMessage("exam.result.answers", exam.getRightAnswersCount(), exam.getQuestions().size()));
+        if (exam.isExamPassed()) {
+            ioService.print(messageService.getMessage("exam.result.passed"));
+        } else {
+            ioService.printError(messageService.getMessage("exam.result.not_passed"));
+        }
+    }
+
     /**
      * Возвращает ответ пользователя в виде цифры.
      * Если пользователь дурак и ввёл некорректную цифру,
@@ -83,17 +71,5 @@ public class ConsoleCommunicationService implements CommunicationService {
             return readAnswer(question);
         }
         return answer;
-    }
-
-    @Override
-    public void printResult(Exam exam) {
-        ioService.printDelimiter();
-        ioService.print(messageService.getMessage("exam.result.user", exam.getUser().getFirstName(), exam.getUser().getLastName()));
-        ioService.print(messageService.getMessage("exam.result.answers", exam.getRightAnswersCount(), exam.getQuestions().size()));
-        if (exam.isExamPassed()) {
-            ioService.print(messageService.getMessage("exam.result.passed"));
-        } else {
-            ioService.printError(messageService.getMessage("exam.result.not_passed"));
-        }
     }
 }

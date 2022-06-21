@@ -7,11 +7,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.otus.spring.belov.component.LocaleHolder;
-import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.dao.QuestionDao;
 import ru.otus.spring.belov.domain.Answer;
+import ru.otus.spring.belov.domain.Exam;
 import ru.otus.spring.belov.domain.Question;
+import ru.otus.spring.belov.domain.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,10 +27,6 @@ class ExamServiceImplTest {
     private QuestionDao questionDao;
     @MockBean
     private CommunicationService communicationService;
-    @MockBean
-    private ExamAppProperties examAppProperties;
-    @MockBean
-    private LocaleHolder localeHolder;
     @Autowired
     private ExamServiceImpl examService;
 
@@ -52,8 +48,8 @@ class ExamServiceImplTest {
                 new Answer(new Question("Question 4", List.of("a", "b", "c", "d", "e", "f", "g"), 2), 2),
                 new Answer(new Question("Question 5", List.of("a", "b", "c", "d", "e", "f", "g"), 0), 0)
         );
-        when(examAppProperties.getRequiredRightAnswers()).thenReturn(requiredRightAnswers);
-        var exam = examService.executeExam();
+        var exam = new Exam(requiredRightAnswers, false, 1, null);
+        examService.executeExam(exam);
         assertEquals(3, exam.getRightAnswersCount(), "Количество правильных ответов не совпадает");
         assertEquals(isPassed, exam.isExamPassed(), "Результат не совпадает");
     }
@@ -65,9 +61,8 @@ class ExamServiceImplTest {
         when(questionDao.findAll()).thenReturn(mockQuestions);
         when(communicationService.getAnswer(any(), anyInt())).thenReturn(null);
 
-        when(examAppProperties.getRequiredRightAnswers()).thenReturn(3);
-        examService.executeExam();
-        verify(communicationService, times(1)).getUserInfo();
+        var exam = new Exam(1, false, 1, new User(null, null));
+        examService.executeExam(exam);
         verify(communicationService, times(5)).askQuestion(any(), anyBoolean());
         verify(communicationService, times(5)).getAnswer(any(), anyInt());
         verify(communicationService, times(1)).printResult(any());

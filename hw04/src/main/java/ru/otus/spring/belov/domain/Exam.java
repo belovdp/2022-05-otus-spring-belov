@@ -20,8 +20,8 @@ public class Exam {
     private final boolean shuffleAnswers;
     /** Количество попыток ответа на вопрос */
     private final int questionAttempts;
-     /** Пользователь */
-    private User user;
+    /** Тестируемый пользователь */
+    private final User user;
     /** Вопросы */
     private List<Question> questions;
     /** Ответы */

@@ -10,3 +10,5 @@ spring:
   messages:
     # Если локаль не нашли, используем бандл по умолчанию, а не бандл с системной локалью
     fallback-to-system-locale: false
+  main:
+    allow-circular-references: true

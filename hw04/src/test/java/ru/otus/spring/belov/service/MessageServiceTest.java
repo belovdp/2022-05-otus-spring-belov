@@ -23,7 +23,7 @@ class MessageServiceTest {
     private LocaleHolder localeHolder;
 
     @Test
-    @DisplayName("Тест чтения с разыми локалями")
+    @DisplayName("Тест вывода с разыми локалями")
     public void changeLocaleTest() {
         when(localeHolder.getLocale()).thenReturn(Locale.ENGLISH, new Locale("ru"));
         assertEquals("User: 123 asd", messageService.getMessage("exam.result.user", 123, "asd"));

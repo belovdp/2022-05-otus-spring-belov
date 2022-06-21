@@ -2,8 +2,6 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.belov.component.LocaleHolder;
-import ru.otus.spring.belov.config.ExamAppProperties;
 import ru.otus.spring.belov.dao.QuestionDao;
 import ru.otus.spring.belov.domain.Exam;
 
@@ -18,18 +16,10 @@ public class ExamServiceImpl implements ExamService {
     private final QuestionDao questionDao;
     /** Сервис по взаимодействию с пользователем */
     private final CommunicationService communicationService;
-    /** Настройки экзамена */
-    private final ExamAppProperties examAppProperties;
-    /** Компонент по работе с локалью */
-    private final LocaleHolder localeHolder;
 
     @Override
-    public Exam executeExam() {
-        var locale = communicationService.chooseLocale();
-        localeHolder.changeLocale(locale);
-        var exam = new Exam(examAppProperties.getRequiredRightAnswers(), examAppProperties.isShuffleAnswers(), examAppProperties.getQuestionAttempts());
+    public void executeExam(Exam exam) {
         exam.setQuestions(questionDao.findAll());
-        exam.setUser(communicationService.getUserInfo());
         exam.getQuestions().stream()
                 .map(question -> {
                     communicationService.askQuestion(question, exam.isShuffleAnswers());
@@ -37,6 +27,5 @@ public class ExamServiceImpl implements ExamService {
                 })
                 .forEach(exam::addAnswer);
         communicationService.printResult(exam);
-        return exam;
     }
 }

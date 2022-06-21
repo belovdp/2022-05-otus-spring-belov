@@ -34,15 +34,6 @@ class ConsoleCommunicationServiceTest {
     private CommunicationService communicationService;
 
     @Test
-    @DisplayName("Тест получиня фамилии и имени пользователя")
-    void userInfoTest() {
-        when(ioService.readAnswer()).thenReturn("Dmitriy", "Belov");
-        var user = communicationService.getUserInfo();
-        assertEquals("Dmitriy", user.getFirstName(), "Неверное имя");
-        assertEquals("Belov", user.getLastName(), "Неверная фамилия");
-    }
-
-    @Test
     @DisplayName("Тест перемешивания ответов")
     void shuffleTest() {
         var isShuffled = false;
@@ -86,8 +77,7 @@ class ConsoleCommunicationServiceTest {
     })
     void printResultTest(int rightAnswer, boolean isPassed) {
         when(messageService.getMessage(anyString(), any())).thenReturn("");
-        var exam = new Exam(3, false, 1);
-        exam.setUser(new User("sdf", "ggg"));
+        var exam = new Exam(3, false, 1, new User("sdf", "ggg"));
         exam.setQuestions(new ArrayList<>());
         IntStream.range(0, 5).forEach(index -> {
             var question = new Question("Question", List.of(), 3);

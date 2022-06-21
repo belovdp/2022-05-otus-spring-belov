@@ -9,6 +9,7 @@ public interface ExamService {
 
     /**
      * Выполняет процесс экзамена
+     * @param exam экзамен
      */
-    Exam executeExam();
+    void executeExam(Exam exam);
 }
