@@ -47,7 +47,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public List<Author> findAll() {
-        return jdbc.query(SELECT_AUTHORS, new AuthorMapper());
+        return jdbc.query(SELECT_AUTHORS, authorMapper);
     }
 
     @Override
@@ -62,7 +62,11 @@ public class AuthorDaoJdbc implements AuthorDao {
             long id = resultSet.getLong("id");
             String name = resultSet.getString("name");
             LocalDate birthday = resultSet.getDate("birthday").toLocalDate();
-            return new Author(id, name, birthday);
+            return Author.builder()
+                    .id(id)
+                    .name(name)
+                    .birthday(birthday)
+                    .build();
         }
     }
 }

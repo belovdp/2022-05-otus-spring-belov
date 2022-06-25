@@ -10,6 +10,8 @@ import ru.otus.spring.belov.service.AuthorService;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 /**
  * Shell команды по работе с авторами
  */
@@ -28,11 +30,10 @@ public class AuthorCommands {
      */
     @ShellMethod(key = {"ia", "insAuthor", "insertAuthor"}, value = """
             Добавляет автора.
-                    Пример:
-                        insertAuthor 'Пушкин А.С.' 1799-05-26""")
+                        Пример: insertAuthor 'Пушкин А.С.' 1799-05-26""")
     public String insert(@ShellOption({"name"}) String name, @ShellOption({"birthDay"}) String birthDay) {
         var author = authorService.save(name, birthDay);
-        return String.format("Автор сохранён: %s", author);
+        return format("Автор сохранён: %s", author);
     }
 
     /**
@@ -52,15 +53,14 @@ public class AuthorCommands {
      */
     @ShellMethod(key = {"fa", "findA", "findAuthor"}, value = """
             Ищет автора, содержащего в ФИО искомую строку
-                    Пример:
-                        findAuthor Пушк""")
+                        Пример: findAuthor Пушк""")
     public String findAuthor(@ShellOption({"name"}) String name) {
         var authors = authorService.findByNameContaining(name);
         return getAuthorsAsString(authors);
     }
 
     private String getAuthorsAsString(List<Author> authors) {
-        return String.format("Список авторов:\n%s", authors.stream()
+        return format("Список авторов:\n%s", authors.stream()
                 .map(Author::toString)
                 .collect(Collectors.joining("\n"))
         );

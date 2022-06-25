@@ -1,5 +1,6 @@
 package ru.otus.spring.belov.domain;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 /**
  * Книга
  */
+@Builder
 @Data
 public class Book {
 

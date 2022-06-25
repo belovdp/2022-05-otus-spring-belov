@@ -20,7 +20,11 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author save(String name, String birthday) {
-        return authorDao.save(new Author(null, name, LocalDate.parse(birthday)));
+        var author = Author.builder()
+                .name(name)
+                .birthday(LocalDate.parse(birthday))
+                .build();
+        return authorDao.save(author);
     }
 
     @Override
