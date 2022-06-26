@@ -1,0 +1,14 @@
+exam-app:
+  filename: questions.csv
+  required-right-answers: 3
+  question-attempts: 2
+  shuffle-answers: true
+  locales:
+    - ru
+    - en
+spring:
+  messages:
+    # Если локаль не нашли, используем бандл по умолчанию, а не бандл с системной локалью
+    fallback-to-system-locale: false
+  main:
+    allow-circular-references: true

@@ -1,0 +1,16 @@
+exam-app:
+  filename: /questionsOk.csv
+  required-right-answers: 3
+  question-attempts: 1
+  shuffle-answers: false
+  locales:
+    - en
+    - ru
+spring:
+  shell:
+    interactive:
+      enabled: false
+  messages:
+    fallback-to-system-locale: false
+  main:
+    allow-circular-references: true
