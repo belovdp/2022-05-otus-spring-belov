@@ -18,4 +18,8 @@ public class Book {
     private String title;
     /** Дата публикации книги */
     private LocalDate published;
+    /** Жанр */
+    private Genre genre;
+    /** Автор */
+    private Author author;
 }

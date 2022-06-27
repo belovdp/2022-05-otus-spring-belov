@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * DAO по работе с авторами через JDBC
@@ -27,6 +28,8 @@ public class AuthorDaoJdbc implements AuthorDao {
     private static final String SELECT_AUTHORS = "SELECT id, name, birthday FROM authors";
     /** Запрос на поиск автора по частичному совпадению в ФИО */
     private static final String SELECT_AUTHOR_BY_NAME_CONTAINING = "SELECT id, name, birthday FROM authors WHERE name LIKE '%' || :name || '%'";
+    /** Запрос на поиск автора по идентификатору */
+    private static final String SELECT_AUTHOR_BY_ID = "SELECT id, name, birthday FROM authors WHERE id  = :id";
     /** Маппер автора */
     private final AuthorMapper authorMapper = new AuthorMapper();
     /** Компонент для работы с jdbc */
@@ -53,6 +56,11 @@ public class AuthorDaoJdbc implements AuthorDao {
     @Override
     public List<Author> findByNameContaining(String name) {
         return jdbc.query(SELECT_AUTHOR_BY_NAME_CONTAINING, Map.of("name", name), authorMapper);
+    }
+
+    @Override
+    public Optional<Author> findById(long id) {
+        return Optional.ofNullable(jdbc.query(SELECT_AUTHOR_BY_ID, Map.of("id", id), rs -> rs.next() ? authorMapper.mapRow(rs, 1) : null));
     }
 
     private static class AuthorMapper implements RowMapper<Author> {

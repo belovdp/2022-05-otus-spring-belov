@@ -27,6 +27,8 @@ public class GenreDaoJdbc implements GenreDao {
     private static final String SELECT_GENRES = "SELECT id, name FROM genres";
     /** Запрос на поиск жанра по названию */
     private static final String SELECT_GENRE_BY_NAME = "SELECT id, name FROM genres WHERE name = :name";
+    /** Запрос на поиск жанра по идентификатору */
+    private static final String SELECT_GENRE_BY_ID = "SELECT id, name FROM genres WHERE id = :id";
     /** Маппер жанра */
     private final GenreMapper genreMapper = new GenreMapper();
     /** Компонент для работы с jdbc */
@@ -50,6 +52,11 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public Optional<Genre> findByName(String name) {
         return Optional.ofNullable(jdbc.query(SELECT_GENRE_BY_NAME, Map.of("name", name), rs -> rs.next() ? genreMapper.mapRow(rs, 1) : null));
+    }
+
+    @Override
+    public Optional<Genre> findById(long id) {
+        return Optional.ofNullable(jdbc.query(SELECT_GENRE_BY_ID, Map.of("id", id), rs -> rs.next() ? genreMapper.mapRow(rs, 1) : null));
     }
 
     private static class GenreMapper implements RowMapper<Genre> {

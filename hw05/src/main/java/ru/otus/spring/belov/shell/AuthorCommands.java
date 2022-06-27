@@ -22,39 +22,25 @@ public class AuthorCommands {
     /** Сервис работы с авторами */
     private final AuthorService authorService;
 
-    /**
-     * Команда на сохранение автора
-     * @param name     имя автора
-     * @param birthDay день рождения
-     * @return информация о сохранении
-     */
     @ShellMethod(key = {"ia", "insAuthor", "insertAuthor"}, value = """
             Добавляет автора.
                         Пример: insertAuthor 'Пушкин А.С.' 1799-05-26""")
-    public String insert(@ShellOption({"name"}) String name, @ShellOption({"birthDay"}) String birthDay) {
+    public String insert(@ShellOption(value = {"name"}, help = "ФИО автора") String name,
+                         @ShellOption(value = {"birthDay"}, help = "Дата рождения автора") String birthDay) {
         var author = authorService.save(name, birthDay);
         return format("Автор сохранён: %s", author);
     }
 
-    /**
-     * Отображает список всех авторов
-     * @return список всех авторов
-     */
     @ShellMethod(key = {"la", "listAuthors"}, value = "Выводит список авторов")
     public String showAll() {
         var authors = authorService.findAll();
         return getAuthorsAsString(authors);
     }
 
-    /**
-     * Поиск автора по частичному совпадению в ФИО
-     * @param name искомое имя
-     * @return найденные авторы
-     */
     @ShellMethod(key = {"fa", "findA", "findAuthor"}, value = """
             Ищет автора, содержащего в ФИО искомую строку
                         Пример: findAuthor Пушк""")
-    public String findAuthor(@ShellOption({"name"}) String name) {
+    public String findAuthor(@ShellOption(value = {"name"}, help = "Строка поиска по ФИО автора") String name) {
         var authors = authorService.findByNameContaining(name);
         return getAuthorsAsString(authors);
     }

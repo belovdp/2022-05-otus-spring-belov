@@ -29,4 +29,11 @@ public interface GenreDao {
      * @return жанр
      */
     Optional<Genre> findByName(String name);
+
+    /**
+     * Возвращает жанр по идентификатору
+     * @param id идентификатор жанра
+     * @return жанр
+     */
+    Optional<Genre> findById(long id);
 }
