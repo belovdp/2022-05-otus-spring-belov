@@ -3,6 +3,6 @@ spring:
     url: jdbc:h2:mem:library
   liquibase:
     change-log: classpath:liquibase/main.xml
-    contexts: prod
+    contexts: test
   main:
     allow-circular-references: true

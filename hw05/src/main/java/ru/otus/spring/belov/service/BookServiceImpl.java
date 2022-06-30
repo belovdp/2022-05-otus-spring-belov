@@ -22,16 +22,14 @@ public class BookServiceImpl implements BookService {
     /** DAO по работе с книгами */
     private final BookDao bookDao;
     /** DAO по работе с жанрами */
-    private final GenreDao genreDao;
+    private final GenreService genreService;
     /** DAO по работе с авторами */
-    private final AuthorDao authorDao;
+    private final AuthorService authorService;
 
     @Override
     public Book save(String title, String published, long genreId, long authorId) {
-        var genre = genreDao.findById(genreId)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %d", genreId)));
-        var author = authorDao.findById(authorId)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", authorId)));
+        var genre = genreService.findById(genreId);
+        var author = authorService.findById(authorId);
         var book = Book.builder()
                 .title(title)
                 .published(LocalDate.parse(published))
@@ -43,10 +41,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book update(long id, String title, String published, long genreId, long authorId) {
-        var genre = genreDao.findById(genreId)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %d", genreId)));
-        var author = authorDao.findById(authorId)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", authorId)));
+        var genre = genreService.findById(genreId);
+        var author = authorService.findById(authorId);
         var book = findById(id);
         book.setTitle(title);
         book.setPublished(LocalDate.parse(published));

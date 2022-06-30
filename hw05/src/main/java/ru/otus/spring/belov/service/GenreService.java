@@ -29,4 +29,11 @@ public interface GenreService {
      * @return жанр
      */
     Optional<Genre> findByName(String name);
+
+    /**
+     * Возвращает жанр по идентификатору
+     * @param id идентификатор жанра
+     * @return жанр
+     */
+    Genre findById(long id);
 }

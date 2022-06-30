@@ -8,6 +8,8 @@ import ru.otus.spring.belov.domain.Genre;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.String.format;
+
 /**
  * Сервис по работе с жанрами
  */
@@ -34,5 +36,11 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Optional<Genre> findByName(String name) {
         return genreDao.findByName(name);
+    }
+
+    @Override
+    public Genre findById(long id) {
+        return genreDao.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %d", id)));
     }
 }

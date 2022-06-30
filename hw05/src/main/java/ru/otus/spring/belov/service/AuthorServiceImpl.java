@@ -8,6 +8,8 @@ import ru.otus.spring.belov.domain.Author;
 import java.time.LocalDate;
 import java.util.List;
 
+import static java.lang.String.format;
+
 /**
  * Сервис по работе с автоарми
  */
@@ -35,5 +37,11 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<Author> findByNameContaining(String name) {
         return authorDao.findByNameContaining(name);
+    }
+
+    @Override
+    public Author findById(long id) {
+        return authorDao.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", id)));
     }
 }

@@ -29,4 +29,11 @@ public interface AuthorService {
      * @return автор содержащий в имени искомую строку
      */
     List<Author> findByNameContaining(String name);
+
+    /**
+     * Возвращает автора по идентификатору
+     * @param id идентификатор автора
+     * @return автор
+     */
+    Author findById(long id);
 }
