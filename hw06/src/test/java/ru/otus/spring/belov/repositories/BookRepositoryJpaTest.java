@@ -14,14 +14,16 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("Тест DAO для работы с книгами")
+@DisplayName("Тест репозитория для работы с книгами")
 @DataJpaTest
 @Import({BookRepositoryJpa.class})
 class BookRepositoryJpaTest {
 
+    private static final long EXISTING_BOOK_ID = 3L;
     @Autowired
     private BookRepositoryJpa bookRepositoryJpa;
     @Autowired
@@ -64,7 +66,7 @@ class BookRepositoryJpaTest {
         var existingBookId = getExistingBook().getId();
         assertThat(bookRepositoryJpa.findById(existingBookId)).isNotEmpty();
         bookRepositoryJpa.deleteById(existingBookId);
-        em.clear();
+        em.flush();
         assertThat(bookRepositoryJpa.findById(existingBookId)).isEmpty();
     }
 
@@ -73,7 +75,7 @@ class BookRepositoryJpaTest {
     void findByIdTest() {
         Book expectedBook = getExistingBook();
         Optional<Book> actualBook = bookRepositoryJpa.findById(expectedBook.getId());
-        assertTrue(actualBook.isPresent(), "Не найден автор");
+        assertTrue(actualBook.isPresent(), "Не найдена книга");
         assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
@@ -100,12 +102,8 @@ class BookRepositoryJpaTest {
     }
 
     private Book getExistingBook() {
-        return Book.builder()
-                .id(3L)
-                .title("Игра престолов")
-                .published(LocalDate.parse("1996-08-06"))
-                .genre(em.find(Genre.class, 2L))
-                .author(em.find(Author.class, 2L))
-                .build();
+        var book = bookRepositoryJpa.findById(EXISTING_BOOK_ID).orElseThrow(() -> new IllegalStateException("Ожидаемая книга не существет"));
+        em.detach(book);
+        return book;
     }
 }

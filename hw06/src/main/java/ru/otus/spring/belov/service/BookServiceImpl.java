@@ -3,8 +3,8 @@ package ru.otus.spring.belov.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.spring.belov.repositories.BookRepository;
 import ru.otus.spring.belov.domain.Book;
+import ru.otus.spring.belov.repositories.BookRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,11 +18,11 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    /** DAO по работе с книгами */
+    /** Репозиторий по работе с книгами */
     private final BookRepository bookRepository;
-    /** DAO по работе с жанрами */
+    /** Репозиторий по работе с жанрами */
     private final GenreService genreService;
-    /** DAO по работе с авторами */
+    /** Репозиторий по работе с авторами */
     private final AuthorService authorService;
 
 

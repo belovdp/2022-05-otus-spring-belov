@@ -25,16 +25,16 @@ public class GenreCommands {
             Добавляет жанр.
                         Пример: insertGenre Фэнтези""")
     public String insert(@ShellOption(value = {"name"}, help = "Название жанра") String name) {
-        var author = genreService.save(name);
-        return format("Жанр сохранён: %s", author);
+        var genre = genreService.save(name);
+        return format("Жанр сохранён: %s", genre);
     }
 
     @ShellMethod(key = {"lg", "listGenre"}, value = "Выводит список жанров")
     public String showAll() {
         var genres = genreService.findAll();
-        return format("Список жанров:\n%s", genres.stream()
+        return format("Список жанров:\n\t%s", genres.stream()
                 .map(Genre::toString)
-                .collect(Collectors.joining("\n")));
+                .collect(Collectors.joining("\n\t")));
     }
 
     @ShellMethod(key = {"fg", "findG", "findGenre"}, value = """

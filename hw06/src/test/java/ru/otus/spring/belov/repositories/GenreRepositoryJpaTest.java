@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@DisplayName("Тест DAO для работы с авторами")
+@DisplayName("Тест репозитория для работы с авторами")
 @DataJpaTest
 @Import(GenreRepositoryJpa.class)
 class GenreRepositoryJpaTest {

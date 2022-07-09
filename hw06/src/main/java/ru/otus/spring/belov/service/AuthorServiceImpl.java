@@ -3,8 +3,8 @@ package ru.otus.spring.belov.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.spring.belov.repositories.AuthorRepository;
 import ru.otus.spring.belov.domain.Author;
+import ru.otus.spring.belov.repositories.AuthorRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +18,7 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
-    /** DAO По работе с авторами */
+    /** Репозиторий По работе с авторами */
     private final AuthorRepository authorRepository;
 
     @Transactional

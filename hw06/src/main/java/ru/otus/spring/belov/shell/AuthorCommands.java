@@ -46,9 +46,9 @@ public class AuthorCommands {
     }
 
     private String getAuthorsAsString(List<Author> authors) {
-        return format("Список авторов:\n%s", authors.stream()
+        return format("Список авторов:\n\t%s", authors.stream()
                 .map(Author::toString)
-                .collect(Collectors.joining("\n"))
+                .collect(Collectors.joining("\n\t"))
         );
     }
 }

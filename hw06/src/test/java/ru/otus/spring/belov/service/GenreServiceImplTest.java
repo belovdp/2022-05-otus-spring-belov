@@ -6,8 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.spring.belov.repositories.GenreRepository;
 import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.repositories.GenreRepository;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;

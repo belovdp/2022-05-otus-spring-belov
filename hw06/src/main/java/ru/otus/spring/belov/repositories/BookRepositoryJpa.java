@@ -12,7 +12,7 @@ import java.util.Optional;
 import static java.util.Optional.ofNullable;
 
 /**
- * Репозиторий по работе с книгами через JDBC
+ * Репозиторий по работе с книгами через JPA
  */
 @Repository
 @RequiredArgsConstructor
@@ -32,9 +32,7 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public void deleteById(long id) {
-        entityManager.createQuery("delete from Book b where b.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        entityManager.remove(entityManager.find(Book.class, id));
     }
 
     @Override

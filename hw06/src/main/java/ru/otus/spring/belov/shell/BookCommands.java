@@ -76,9 +76,9 @@ public class BookCommands {
     }
 
     private String getBookAsString(List<Book> books) {
-        return format("Список книг:\n%s", books.stream()
+        return format("Список книг:\n\t%s", books.stream()
                 .map(Book::toString)
-                .collect(Collectors.joining("\n"))
+                .collect(Collectors.joining("\n\t"))
         );
     }
 }

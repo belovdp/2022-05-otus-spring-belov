@@ -6,10 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.spring.belov.repositories.BookRepository;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.repositories.BookRepository;
 
 import java.time.LocalDate;
 

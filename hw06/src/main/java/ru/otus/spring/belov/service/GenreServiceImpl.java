@@ -3,8 +3,8 @@ package ru.otus.spring.belov.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.spring.belov.repositories.GenreRepository;
 import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.repositories.GenreRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,7 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
 
-    /** DAO по работе с жанрами */
+    /** Репозиторий по работе с жанрами */
     private final GenreRepository genreRepository;
 
     @Transactional

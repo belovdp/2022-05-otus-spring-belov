@@ -4,9 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
+import static org.hibernate.annotations.FetchMode.SUBSELECT;
 
 /**
  * Книга
@@ -41,4 +46,8 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "author_id")
     private Author author;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = EAGER)
+    @Fetch(SUBSELECT)
+    private List<BookComment> comments;
 }

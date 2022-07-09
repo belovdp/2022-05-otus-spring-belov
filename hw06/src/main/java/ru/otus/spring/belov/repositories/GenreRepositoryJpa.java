@@ -12,7 +12,7 @@ import java.util.Optional;
 import static java.util.Optional.ofNullable;
 
 /**
- * Репозиторий по работе с жанрами через JDBC
+ * Репозиторий по работе с жанрами через JPA
  */
 @Repository
 @RequiredArgsConstructor
