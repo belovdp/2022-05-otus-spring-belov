@@ -17,21 +17,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тест репозитория для работы с авторами")
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
-class GenreRepositoryJpaTest {
+class GenreRepositoryTest {
 
     private static final long EXISTING_GENRE_ID = 2;
     private static final String EXISTING_GENRE_NAME = "Фэнтези";
 
     @Autowired
-    private GenreRepositoryJpa genreRepositoryJpa;
+    private GenreRepository genreRepository;
 
     @DisplayName("Тестирует сохранение записи")
     @Test
     void saveTest() {
         Genre expectedGenre = Genre.builder().name("test").build();
-        genreRepositoryJpa.save(expectedGenre);
-        Optional<Genre> actualGenre = genreRepositoryJpa.findById(expectedGenre.getId());
+        genreRepository.save(expectedGenre);
+        Optional<Genre> actualGenre = genreRepository.findById(expectedGenre.getId());
         assertTrue(actualGenre.isPresent(), "Не найден автор");
         assertThat(actualGenre.get()).usingRecursiveComparison().isEqualTo(expectedGenre);
     }
@@ -43,7 +42,7 @@ class GenreRepositoryJpaTest {
                 .id(EXISTING_GENRE_ID)
                 .name(EXISTING_GENRE_NAME)
                 .build();
-        List<Genre> actualGenreList = genreRepositoryJpa.findAll();
+        List<Genre> actualGenreList = genreRepository.findAll();
         assertThat(actualGenreList)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
                 .contains(expectedGenre);
@@ -57,7 +56,7 @@ class GenreRepositoryJpaTest {
                 .id(EXISTING_GENRE_ID)
                 .name(EXISTING_GENRE_NAME)
                 .build();
-        Optional<Genre> actualGenre = genreRepositoryJpa.findByName(EXISTING_GENRE_NAME);
+        Optional<Genre> actualGenre = genreRepository.findByName(EXISTING_GENRE_NAME);
         assertTrue(actualGenre.isPresent(), "Не найден автор");
         assertTrue(new ReflectionEquals(expectedGenre, "books").matches(actualGenre.get()), "Неверная запись");
         assertEquals(3, actualGenre.get().getBooks().size(), "Неверное количество книг");
@@ -70,7 +69,7 @@ class GenreRepositoryJpaTest {
                 .id(EXISTING_GENRE_ID)
                 .name(EXISTING_GENRE_NAME)
                 .build();
-        Optional<Genre> actualGenre = genreRepositoryJpa.findById(expectedGenre.getId());
+        Optional<Genre> actualGenre = genreRepository.findById(expectedGenre.getId());
         assertTrue(actualGenre.isPresent(), "Не найден автор");
         assertTrue(new ReflectionEquals(expectedGenre, "books").matches(actualGenre.get()), "Неверная запись");
         assertEquals(3, actualGenre.get().getBooks().size(), "Неверное количество книг");

@@ -1,21 +1,14 @@
 package ru.otus.spring.belov.repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.belov.domain.Author;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Репозиторий по работе с авторами
  */
-public interface AuthorRepository {
-
-    /**
-     * Сохраняет автора
-     * @param author автор
-     * @return автор
-     */
-    Author save(Author author);
+public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     /**
      * Возвращает всех авторов
@@ -28,12 +21,5 @@ public interface AuthorRepository {
      * @param name строка поиска
      * @return автор содержащий в имени искомую строку
      */
-    List<Author> findByNameContaining(String name);
-
-    /**
-     * Возвращает автора по идентификатору
-     * @param id идентификатор автора
-     * @return автор
-     */
-    Optional<Author> findById(long id);
+    List<Author> findByNameContainingIgnoreCase(String name);
 }

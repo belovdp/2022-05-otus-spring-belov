@@ -30,7 +30,7 @@ public class BookCommentServiceImpl implements BookCommentService {
                 .text(text)
                 .book(book)
                 .build();
-        return bookCommentRepository.saveOrUpdate(bookComment);
+        return bookCommentRepository.save(bookComment);
     }
 
     @Transactional
@@ -38,7 +38,7 @@ public class BookCommentServiceImpl implements BookCommentService {
     public BookComment update(long id, String text) {
         var bookComment = findById(id);
         bookComment.setText(text);
-        return bookCommentRepository.saveOrUpdate(bookComment);
+        return bookCommentRepository.save(bookComment);
     }
 
     @Transactional

@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
                 .genre(genre)
                 .author(author)
                 .build();
-        return bookRepository.saveOrUpdate(book);
+        return bookRepository.save(book);
     }
 
     @Transactional
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
         book.setPublished(LocalDate.parse(published));
         book.setGenre(genre);
         book.setAuthor(author);
-        return bookRepository.saveOrUpdate(book);
+        return bookRepository.save(book);
     }
 
     @Transactional

@@ -18,22 +18,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тест репозитория для работы с авторами")
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
-class AuthorRepositoryJpaTest {
+class AuthorRepositoryTest {
 
     private static final long EXISTING_AUTHOR_ID = 2;
     private static final String EXISTING_AUTHOR_NAME = "Джордж Реймонд Ричард Мартин";
     private static final LocalDate EXISTING_AUTHOR_BIRTHDAY = LocalDate.parse("1948-09-20");
 
     @Autowired
-    private AuthorRepositoryJpa authorRepositoryJpa;
+    private AuthorRepository authorRepository;
 
     @DisplayName("Тестирует сохранение записи")
     @Test
     void saveTest() {
         Author expectedAuthor = Author.builder().name("test").birthday(LocalDate.now()).build();
-        authorRepositoryJpa.save(expectedAuthor);
-        Optional<Author> actualAuthor = authorRepositoryJpa.findById(expectedAuthor.getId());
+        authorRepository.save(expectedAuthor);
+        Optional<Author> actualAuthor = authorRepository.findById(expectedAuthor.getId());
         assertTrue(actualAuthor.isPresent(), "Не найден автор");
         assertThat(actualAuthor.get()).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }
@@ -46,7 +45,7 @@ class AuthorRepositoryJpaTest {
                 .name(EXISTING_AUTHOR_NAME)
                 .birthday(EXISTING_AUTHOR_BIRTHDAY)
                 .build();
-        List<Author> actualAuthorList = authorRepositoryJpa.findAll();
+        List<Author> actualAuthorList = authorRepository.findAll();
         assertThat(actualAuthorList)
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
                 .contains(expectedAuthor);
@@ -56,10 +55,10 @@ class AuthorRepositoryJpaTest {
     @DisplayName("Тестирует поиск записи по имени автора")
     @Test
     void findByNameContainingTest() {
-        var authors = authorRepositoryJpa.findByNameContaining("орд");
+        var authors = authorRepository.findByNameContainingIgnoreCase("орд");
         assertEquals(1, authors.size());
         assertEquals(2, authors.get(0).getId());
-        authors = authorRepositoryJpa.findByNameContaining("ев");
+        authors = authorRepository.findByNameContainingIgnoreCase("ев");
         assertEquals(2, authors.size());
         assertTrue(List.of(1L, 3L).containsAll(authors.stream().map(Author::getId).toList()));
     }
@@ -72,7 +71,7 @@ class AuthorRepositoryJpaTest {
                 .name(EXISTING_AUTHOR_NAME)
                 .birthday(EXISTING_AUTHOR_BIRTHDAY)
                 .build();
-        Optional<Author> actualAuthor = authorRepositoryJpa.findById(expectedAuthor.getId());
+        Optional<Author> actualAuthor = authorRepository.findById(expectedAuthor.getId());
         assertTrue(actualAuthor.isPresent(), "Не найден автор");
         assertTrue(new ReflectionEquals(expectedAuthor, "books").matches(actualAuthor.get()));
         assertEquals(4, actualAuthor.get().getBooks().size(), "Неверное количество книг");

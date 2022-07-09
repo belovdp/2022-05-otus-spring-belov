@@ -1,5 +1,6 @@
 package ru.otus.spring.belov.repositories;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.otus.spring.belov.domain.Genre;
 
 import java.util.List;
@@ -8,14 +9,7 @@ import java.util.Optional;
 /**
  * Репозиторий по работе с жанрами
  */
-public interface GenreRepository {
-
-    /**
-     * Сохраняет жанр
-     * @param genre жанр
-     * @return жанр
-     */
-    Genre save(Genre genre);
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 
     /**
      * Возвращает все жанры
@@ -29,11 +23,4 @@ public interface GenreRepository {
      * @return жанр
      */
     Optional<Genre> findByName(String name);
-
-    /**
-     * Возвращает жанр по идентификатору
-     * @param id идентификатор жанра
-     * @return жанр
-     */
-    Optional<Genre> findById(long id);
 }

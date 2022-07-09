@@ -18,14 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тест репозитория для работы с комментариями")
 @DataJpaTest
-@Import({BookCommentRepositoryJpa.class})
-class BookCommentRepositoryJpaTest {
+class BookCommentRepositoryTest {
 
     private static final long EXISTING_BOOK_COMMENT_ID = 11;
     private static final String EXISTING_BOOK_COMMENT_TEXT = "Ну пожалуй теперь точно всё";
     private static final long EXISTING_BOOK_COMMENT_BOOK_ID = 2;
     @Autowired
-    private BookCommentRepositoryJpa bookCommentRepositoryJpa;
+    private BookCommentRepository bookCommentRepository;
     @Autowired
     private TestEntityManager em;
 
@@ -36,8 +35,8 @@ class BookCommentRepositoryJpaTest {
                 .text("test")
                 .book(em.find(Book.class, EXISTING_BOOK_COMMENT_BOOK_ID))
                 .build();
-        bookCommentRepositoryJpa.saveOrUpdate(expectedBookComment);
-        Optional<BookComment> actualBookComment = bookCommentRepositoryJpa.findById(expectedBookComment.getId());
+        bookCommentRepository.save(expectedBookComment);
+        Optional<BookComment> actualBookComment = bookCommentRepository.findById(expectedBookComment.getId());
         assertTrue(actualBookComment.isPresent(), "Не найден комментарий");
         assertThat(actualBookComment.get()).usingRecursiveComparison().isEqualTo(expectedBookComment);
     }
@@ -49,8 +48,8 @@ class BookCommentRepositoryJpaTest {
                 .id(EXISTING_BOOK_COMMENT_ID)
                 .text("test")
                 .build();
-        bookCommentRepositoryJpa.saveOrUpdate(expectedBookComment);
-        Optional<BookComment> actualBookComment = bookCommentRepositoryJpa.findById(expectedBookComment.getId());
+        bookCommentRepository.save(expectedBookComment);
+        Optional<BookComment> actualBookComment = bookCommentRepository.findById(expectedBookComment.getId());
         assertTrue(actualBookComment.isPresent(), "Не найден комментарий");
         assertThat(actualBookComment.get()).usingRecursiveComparison().isEqualTo(expectedBookComment);
     }
@@ -58,10 +57,10 @@ class BookCommentRepositoryJpaTest {
     @DisplayName("Тестирует удаление комментария")
     @Test
     void deleteByIdTest() {
-        assertThat(bookCommentRepositoryJpa.findById(EXISTING_BOOK_COMMENT_ID)).isNotEmpty();
-        bookCommentRepositoryJpa.deleteById(EXISTING_BOOK_COMMENT_ID);
-        em.clear();
-        assertThat(bookCommentRepositoryJpa.findById(EXISTING_BOOK_COMMENT_ID)).isEmpty();
+        assertThat(bookCommentRepository.findById(EXISTING_BOOK_COMMENT_ID)).isNotEmpty();
+        bookCommentRepository.deleteById(EXISTING_BOOK_COMMENT_ID);
+        em.flush();
+        assertThat(bookCommentRepository.findById(EXISTING_BOOK_COMMENT_ID)).isEmpty();
     }
 
     @DisplayName("Тестирует поиск комментария по идентификатору")
@@ -72,7 +71,7 @@ class BookCommentRepositoryJpaTest {
                 .text(EXISTING_BOOK_COMMENT_TEXT)
                 .book(em.find(Book.class, EXISTING_BOOK_COMMENT_BOOK_ID))
                 .build();
-        Optional<BookComment> actualBook = bookCommentRepositoryJpa.findById(expectedBookComment.getId());
+        Optional<BookComment> actualBook = bookCommentRepository.findById(expectedBookComment.getId());
         assertTrue(actualBook.isPresent(), "Не найден комментарий");
         assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(expectedBookComment);
     }
@@ -86,7 +85,7 @@ class BookCommentRepositoryJpaTest {
                 .text(EXISTING_BOOK_COMMENT_TEXT)
                 .book(em.find(Book.class, EXISTING_BOOK_COMMENT_BOOK_ID))
                 .build();
-        List<BookComment> actualBookList = bookCommentRepositoryJpa.findAll();
+        List<BookComment> actualBookList = bookCommentRepository.findAll();
         assertThat(actualBookList)
                 .usingRecursiveFieldByFieldElementComparator()
                 .contains(expectedBookComment);

@@ -20,12 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тест репозитория для работы с книгами")
 @DataJpaTest
-@Import({BookRepositoryJpa.class})
-class BookRepositoryJpaTest {
+class BookRepositoryTest {
 
     private static final long EXISTING_BOOK_ID = 3L;
     @Autowired
-    private BookRepositoryJpa bookRepositoryJpa;
+    private BookRepository bookRepository;
     @Autowired
     private TestEntityManager em;
 
@@ -38,8 +37,8 @@ class BookRepositoryJpaTest {
                 .genre(em.find(Genre.class, 2L))
                 .author(em.find(Author.class, 2L))
                 .build();
-        bookRepositoryJpa.saveOrUpdate(expectedBook);
-        Optional<Book> actualBook = bookRepositoryJpa.findById(expectedBook.getId());
+        bookRepository.save(expectedBook);
+        Optional<Book> actualBook = bookRepository.findById(expectedBook.getId());
         assertTrue(actualBook.isPresent(), "Не найдена книга");
         assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(expectedBook);
     }
@@ -54,8 +53,8 @@ class BookRepositoryJpaTest {
                 .genre(em.find(Genre.class, 2L))
                 .author(em.find(Author.class, 2L))
                 .build();
-        bookRepositoryJpa.saveOrUpdate(expectedBook);
-        Optional<Book> actualBook = bookRepositoryJpa.findById(expectedBook.getId());
+        bookRepository.save(expectedBook);
+        Optional<Book> actualBook = bookRepository.findById(expectedBook.getId());
         assertTrue(actualBook.isPresent(), "Не найдена книга");
         assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(expectedBook);
     }
@@ -64,17 +63,17 @@ class BookRepositoryJpaTest {
     @Test
     void deleteByIdTest() {
         var existingBookId = getExistingBook().getId();
-        assertThat(bookRepositoryJpa.findById(existingBookId)).isNotEmpty();
-        bookRepositoryJpa.deleteById(existingBookId);
+        assertThat(bookRepository.findById(existingBookId)).isNotEmpty();
+        bookRepository.deleteById(existingBookId);
         em.flush();
-        assertThat(bookRepositoryJpa.findById(existingBookId)).isEmpty();
+        assertThat(bookRepository.findById(existingBookId)).isEmpty();
     }
 
     @DisplayName("Тестирует поиск книги по идентификатору")
     @Test
     void findByIdTest() {
         Book expectedBook = getExistingBook();
-        Optional<Book> actualBook = bookRepositoryJpa.findById(expectedBook.getId());
+        Optional<Book> actualBook = bookRepository.findById(expectedBook.getId());
         assertTrue(actualBook.isPresent(), "Не найдена книга");
         assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(expectedBook);
     }
@@ -83,7 +82,7 @@ class BookRepositoryJpaTest {
     @Test
     void findAllTest() {
         Book expectedBook = getExistingBook();
-        List<Book> actualBookList = bookRepositoryJpa.findAll();
+        List<Book> actualBookList = bookRepository.findAll();
         assertThat(actualBookList)
                 .usingRecursiveFieldByFieldElementComparator()
                 .contains(expectedBook);
@@ -94,7 +93,7 @@ class BookRepositoryJpaTest {
     @Test
     void findAllByGenreNameTest() {
         Book expectedBook = getExistingBook();
-        List<Book> actualBookList = bookRepositoryJpa.findAllByGenreName("Фэнтези");
+        List<Book> actualBookList = bookRepository.findAllByGenreName("Фэнтези");
         assertThat(actualBookList)
                 .usingRecursiveFieldByFieldElementComparator()
                 .contains(expectedBook);
@@ -102,7 +101,7 @@ class BookRepositoryJpaTest {
     }
 
     private Book getExistingBook() {
-        var book = bookRepositoryJpa.findById(EXISTING_BOOK_ID).orElseThrow(() -> new IllegalStateException("Ожидаемая книга не существет"));
+        var book = bookRepository.findById(EXISTING_BOOK_ID).orElseThrow(() -> new IllegalStateException("Ожидаемая книга не существет"));
         em.detach(book);
         return book;
     }

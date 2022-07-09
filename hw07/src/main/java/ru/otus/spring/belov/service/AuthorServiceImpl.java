@@ -40,7 +40,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Transactional(readOnly = true)
     @Override
     public List<Author> findByNameContaining(String name) {
-        return authorRepository.findByNameContaining(name);
+        return authorRepository.findByNameContainingIgnoreCase(name);
     }
 
     @Transactional(readOnly = true)

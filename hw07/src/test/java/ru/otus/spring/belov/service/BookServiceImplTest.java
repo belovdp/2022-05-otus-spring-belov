@@ -42,7 +42,7 @@ class BookServiceImplTest {
         when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
         when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
         bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-        verify(bookRepository).saveOrUpdate(argThat(actualSavedBook -> {
+        verify(bookRepository).save(argThat(actualSavedBook -> {
             assertThat(actualSavedBook)
                     .usingRecursiveComparison()
                     .isEqualTo(expectedBook);
@@ -62,7 +62,7 @@ class BookServiceImplTest {
         when(bookRepository.findById(expectedBook.getId()))
                 .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
         bookService.update(2, expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-        verify(bookRepository).saveOrUpdate(argThat(actualSavedBook -> {
+        verify(bookRepository).save(argThat(actualSavedBook -> {
             assertThat(actualSavedBook)
                     .usingRecursiveComparison()
                     .isEqualTo(expectedBook);
@@ -73,8 +73,8 @@ class BookServiceImplTest {
     @DisplayName("Тест поиска по идентификатору книги")
     @Test
     void findById() {
-        when(bookRepository.findById(1)).thenReturn(of(Book.builder().build()));
-        when(bookRepository.findById(2)).thenReturn(empty());
+        when(bookRepository.findById(1L)).thenReturn(of(Book.builder().build()));
+        when(bookRepository.findById(2L)).thenReturn(empty());
         assertThatCode(() -> bookService.findById(1))
                 .doesNotThrowAnyException();
         assertThatThrownBy(() -> bookService.findById(2))
