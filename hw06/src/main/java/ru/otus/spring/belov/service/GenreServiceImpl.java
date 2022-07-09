@@ -2,7 +2,8 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.belov.dao.GenreDao;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.spring.belov.repositories.GenreRepository;
 import ru.otus.spring.belov.domain.Genre;
 
 import java.util.List;
@@ -18,29 +19,33 @@ import static java.lang.String.format;
 public class GenreServiceImpl implements GenreService {
 
     /** DAO по работе с жанрами */
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
+    @Transactional
     @Override
     public Genre save(String name) {
         var genre = Genre.builder()
                 .name(name)
                 .build();
-        return genreDao.save(genre);
+        return genreRepository.save(genre);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Genre> findAll() {
-        return genreDao.findAll();
+        return genreRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Optional<Genre> findByName(String name) {
-        return genreDao.findByName(name);
+        return genreRepository.findByName(name);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Genre findById(long id) {
-        return genreDao.findById(id)
+        return genreRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %d", id)));
     }
 }

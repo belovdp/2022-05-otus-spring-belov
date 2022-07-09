@@ -2,7 +2,8 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.belov.dao.AuthorDao;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.spring.belov.repositories.AuthorRepository;
 import ru.otus.spring.belov.domain.Author;
 
 import java.time.LocalDate;
@@ -18,30 +19,34 @@ import static java.lang.String.format;
 public class AuthorServiceImpl implements AuthorService {
 
     /** DAO По работе с авторами */
-    private final AuthorDao authorDao;
+    private final AuthorRepository authorRepository;
 
+    @Transactional
     @Override
     public Author save(String name, String birthday) {
         var author = Author.builder()
                 .name(name)
                 .birthday(LocalDate.parse(birthday))
                 .build();
-        return authorDao.save(author);
+        return authorRepository.save(author);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Author> findAll() {
-        return authorDao.findAll();
+        return authorRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Author> findByNameContaining(String name) {
-        return authorDao.findByNameContaining(name);
+        return authorRepository.findByNameContaining(name);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Author findById(long id) {
-        return authorDao.findById(id)
+        return authorRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", id)));
     }
 }

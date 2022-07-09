@@ -1,4 +1,4 @@
-package ru.otus.spring.belov.dao;
+package ru.otus.spring.belov.repositories;
 
 import ru.otus.spring.belov.domain.Book;
 
@@ -6,23 +6,16 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * DAO по работе с книгами
+ * Репозиторий по работе с книгами
  */
-public interface BookDao {
+public interface BookRepository {
 
     /**
-     * Сохраняет книгу
+     * Сохраняет или обновляет книгу
      * @param book книга
      * @return книга
      */
-    Book save(Book book);
-
-    /**
-     * Обновляет книгу
-     * @param book книга
-     * @return книга
-     */
-    Book update(Book book);
+    Book saveOrUpdate(Book book);
 
     /**
      * Удаляет книгу по идентификатору

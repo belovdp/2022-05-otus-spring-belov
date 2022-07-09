@@ -55,7 +55,7 @@ public class BookCommands {
 
     @ShellMethod(key = {"fb", "findBook"}, value = """
             Ищет книгу по идентификатору.
-                        Пример: findById 1""")
+                        Пример: findBook 1""")
     public String show(@ShellOption(value = {"id"}, help = "Идентификатор искомой книги") long id) {
         var book = bookService.findById(id);
         return format("Книга найдена: %s", book);

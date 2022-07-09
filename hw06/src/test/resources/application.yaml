@@ -6,3 +6,7 @@ spring:
     contexts: test
   main:
     allow-circular-references: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none

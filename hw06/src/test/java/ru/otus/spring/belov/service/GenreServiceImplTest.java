@@ -6,17 +6,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.spring.belov.dao.AuthorDao;
-import ru.otus.spring.belov.dao.GenreDao;
-import ru.otus.spring.belov.domain.Author;
+import ru.otus.spring.belov.repositories.GenreRepository;
 import ru.otus.spring.belov.domain.Genre;
-
-import java.time.LocalDate;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -26,7 +21,7 @@ import static org.mockito.Mockito.when;
 class GenreServiceImplTest {
 
     @Mock
-    private GenreDao genreDao;
+    private GenreRepository genreRepository;
     @InjectMocks
     private GenreServiceImpl genreService;
 
@@ -37,7 +32,7 @@ class GenreServiceImplTest {
                 .name("testName")
                 .build();
         genreService.save(expectedSavedGenre.getName());
-        verify(genreDao).save(argThat(actualSavedAuthor -> {
+        verify(genreRepository).save(argThat(actualSavedAuthor -> {
             assertThat(actualSavedAuthor)
                     .usingRecursiveComparison()
                     .isEqualTo(expectedSavedGenre);
@@ -48,8 +43,8 @@ class GenreServiceImplTest {
     @DisplayName("Тест поиска по идентификатору жанра")
     @Test
     void findByIdTest() {
-        when(genreDao.findById(1)).thenReturn(of(Genre.builder().build()));
-        when(genreDao.findById(2)).thenReturn(empty());
+        when(genreRepository.findById(1)).thenReturn(of(Genre.builder().build()));
+        when(genreRepository.findById(2)).thenReturn(empty());
         assertThatCode(() -> genreService.findById(1))
                 .doesNotThrowAnyException();
         assertThatThrownBy(() -> genreService.findById(2))

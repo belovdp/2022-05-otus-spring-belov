@@ -1,4 +1,4 @@
-package ru.otus.spring.belov.dao;
+package ru.otus.spring.belov.repositories;
 
 import ru.otus.spring.belov.domain.Author;
 
@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * DAO по работе с авторами
+ * Репозиторий по работе с авторами
  */
-public interface AuthorDao {
+public interface AuthorRepository {
 
     /**
      * Сохраняет автора

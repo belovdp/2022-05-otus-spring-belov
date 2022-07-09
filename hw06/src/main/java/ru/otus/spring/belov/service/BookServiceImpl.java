@@ -2,9 +2,8 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.belov.dao.AuthorDao;
-import ru.otus.spring.belov.dao.BookDao;
-import ru.otus.spring.belov.dao.GenreDao;
+import org.springframework.transaction.annotation.Transactional;
+import ru.otus.spring.belov.repositories.BookRepository;
 import ru.otus.spring.belov.domain.Book;
 
 import java.time.LocalDate;
@@ -20,12 +19,14 @@ import static java.lang.String.format;
 public class BookServiceImpl implements BookService {
 
     /** DAO по работе с книгами */
-    private final BookDao bookDao;
+    private final BookRepository bookRepository;
     /** DAO по работе с жанрами */
     private final GenreService genreService;
     /** DAO по работе с авторами */
     private final AuthorService authorService;
 
+
+    @Transactional
     @Override
     public Book save(String title, String published, long genreId, long authorId) {
         var genre = genreService.findById(genreId);
@@ -36,9 +37,10 @@ public class BookServiceImpl implements BookService {
                 .genre(genre)
                 .author(author)
                 .build();
-        return bookDao.save(book);
+        return bookRepository.saveOrUpdate(book);
     }
 
+    @Transactional
     @Override
     public Book update(long id, String title, String published, long genreId, long authorId) {
         var genre = genreService.findById(genreId);
@@ -48,27 +50,31 @@ public class BookServiceImpl implements BookService {
         book.setPublished(LocalDate.parse(published));
         book.setGenre(genre);
         book.setAuthor(author);
-        return bookDao.update(book);
+        return bookRepository.saveOrUpdate(book);
     }
 
+    @Transactional
     @Override
     public void deleteById(long id) {
-        bookDao.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Book findById(long id) {
-        return bookDao.findById(id)
+        return bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %d", id)));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Book> findAll() {
-        return bookDao.findAll();
+        return bookRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Book> findAllByGenreName(String genreName) {
-        return bookDao.findAllByGenreName(genreName);
+        return bookRepository.findAllByGenreName(genreName);
     }
 }

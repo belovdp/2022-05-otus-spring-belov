@@ -1,9 +1,10 @@
-package ru.otus.spring.belov.dao;
+package ru.otus.spring.belov.repositories;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.belov.domain.Author;
 
@@ -16,23 +17,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тест DAO для работы с авторами")
-@JdbcTest
-@Import(AuthorDaoJdbc.class)
-class AuthorDaoJdbcTest {
+@DataJpaTest
+@Import(AuthorRepositoryJpa.class)
+class AuthorRepositoryJpaTest {
 
     private static final long EXISTING_AUTHOR_ID = 2;
     private static final String EXISTING_AUTHOR_NAME = "Джордж Реймонд Ричард Мартин";
     private static final LocalDate EXISTING_AUTHOR_BIRTHDAY = LocalDate.parse("1948-09-20");
 
     @Autowired
-    private AuthorDaoJdbc authorDaoJdbc;
+    private AuthorRepositoryJpa authorRepositoryJpa;
 
     @DisplayName("Тестирует сохранение записи")
     @Test
     void saveTest() {
         Author expectedAuthor = Author.builder().name("test").birthday(LocalDate.now()).build();
-        authorDaoJdbc.save(expectedAuthor);
-        Optional<Author> actualAuthor = authorDaoJdbc.findById(expectedAuthor.getId());
+        authorRepositoryJpa.save(expectedAuthor);
+        Optional<Author> actualAuthor = authorRepositoryJpa.findById(expectedAuthor.getId());
         assertTrue(actualAuthor.isPresent(), "Не найден автор");
         assertThat(actualAuthor.get()).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }
@@ -45,9 +46,9 @@ class AuthorDaoJdbcTest {
                 .name(EXISTING_AUTHOR_NAME)
                 .birthday(EXISTING_AUTHOR_BIRTHDAY)
                 .build();
-        List<Author> actualAuthorList = authorDaoJdbc.findAll();
+        List<Author> actualAuthorList = authorRepositoryJpa.findAll();
         assertThat(actualAuthorList)
-                .usingRecursiveFieldByFieldElementComparator()
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
                 .contains(expectedAuthor);
         assertEquals(4, actualAuthorList.size(), "Неверное количество записей");
     }
@@ -55,10 +56,10 @@ class AuthorDaoJdbcTest {
     @DisplayName("Тестирует поиск записи по имени автора")
     @Test
     void findByNameContainingTest() {
-        var authors = authorDaoJdbc.findByNameContaining("орд");
+        var authors = authorRepositoryJpa.findByNameContaining("орд");
         assertEquals(1, authors.size());
         assertEquals(2, authors.get(0).getId());
-        authors = authorDaoJdbc.findByNameContaining("ев");
+        authors = authorRepositoryJpa.findByNameContaining("ев");
         assertEquals(2, authors.size());
         assertTrue(List.of(1L, 3L).containsAll(authors.stream().map(Author::getId).toList()));
     }
@@ -71,8 +72,9 @@ class AuthorDaoJdbcTest {
                 .name(EXISTING_AUTHOR_NAME)
                 .birthday(EXISTING_AUTHOR_BIRTHDAY)
                 .build();
-        Optional<Author> actualAuthor = authorDaoJdbc.findById(expectedAuthor.getId());
+        Optional<Author> actualAuthor = authorRepositoryJpa.findById(expectedAuthor.getId());
         assertTrue(actualAuthor.isPresent(), "Не найден автор");
-        assertThat(actualAuthor.get()).usingRecursiveComparison().isEqualTo(expectedAuthor);
+        assertTrue(new ReflectionEquals(expectedAuthor, "books").matches(actualAuthor.get()));
+        assertEquals(4, actualAuthor.get().getBooks().size(), "Неверное количество книг");
     }
 }

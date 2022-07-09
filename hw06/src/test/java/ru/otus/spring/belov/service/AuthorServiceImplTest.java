@@ -6,12 +6,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.dao.EmptyResultDataAccessException;
-import ru.otus.spring.belov.dao.AuthorDao;
+import ru.otus.spring.belov.repositories.AuthorRepository;
 import ru.otus.spring.belov.domain.Author;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 import static java.util.Optional.*;
 import static org.assertj.core.api.Assertions.*;
@@ -26,7 +24,7 @@ import static org.mockito.Mockito.when;
 class AuthorServiceImplTest {
 
     @Mock
-    private AuthorDao authorDao;
+    private AuthorRepository authorRepository;
     @InjectMocks
     private AuthorServiceImpl authorService;
 
@@ -38,7 +36,7 @@ class AuthorServiceImplTest {
                 .birthday(LocalDate.now())
                 .build();
         authorService.save(expectedSavedAuthor.getName(), expectedSavedAuthor.getBirthday().toString());
-        verify(authorDao).save(argThat(actualSavedAuthor -> {
+        verify(authorRepository).save(argThat(actualSavedAuthor -> {
             assertThat(actualSavedAuthor)
                     .usingRecursiveComparison()
                     .isEqualTo(expectedSavedAuthor);
@@ -49,8 +47,8 @@ class AuthorServiceImplTest {
     @DisplayName("Тест поиска по идентификатору автора")
     @Test
     void findByIdTest() {
-        when(authorDao.findById(1)).thenReturn(of(Author.builder().build()));
-        when(authorDao.findById(2)).thenReturn(empty());
+        when(authorRepository.findById(1)).thenReturn(of(Author.builder().build()));
+        when(authorRepository.findById(2)).thenReturn(empty());
         assertThatCode(() -> authorService.findById(1))
                 .doesNotThrowAnyException();
         assertThatThrownBy(() -> authorService.findById(2))

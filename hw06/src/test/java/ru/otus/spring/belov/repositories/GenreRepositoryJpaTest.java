@@ -1,9 +1,10 @@
-package ru.otus.spring.belov.dao;
+package ru.otus.spring.belov.repositories;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.belov.domain.Genre;
 
@@ -15,22 +16,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Тест DAO для работы с авторами")
-@JdbcTest
-@Import(GenreDaoJdbc.class)
-class GenreDaoJdbcTest {
+@DataJpaTest
+@Import(GenreRepositoryJpa.class)
+class GenreRepositoryJpaTest {
 
     private static final long EXISTING_GENRE_ID = 2;
     private static final String EXISTING_GENRE_NAME = "Фэнтези";
 
     @Autowired
-    private GenreDaoJdbc genreDaoJdbc;
+    private GenreRepositoryJpa genreRepositoryJpa;
 
     @DisplayName("Тестирует сохранение записи")
     @Test
     void saveTest() {
         Genre expectedGenre = Genre.builder().name("test").build();
-        genreDaoJdbc.save(expectedGenre);
-        Optional<Genre> actualGenre = genreDaoJdbc.findById(expectedGenre.getId());
+        genreRepositoryJpa.save(expectedGenre);
+        Optional<Genre> actualGenre = genreRepositoryJpa.findById(expectedGenre.getId());
         assertTrue(actualGenre.isPresent(), "Не найден автор");
         assertThat(actualGenre.get()).usingRecursiveComparison().isEqualTo(expectedGenre);
     }
@@ -42,9 +43,9 @@ class GenreDaoJdbcTest {
                 .id(EXISTING_GENRE_ID)
                 .name(EXISTING_GENRE_NAME)
                 .build();
-        List<Genre> actualGenreList = genreDaoJdbc.findAll();
+        List<Genre> actualGenreList = genreRepositoryJpa.findAll();
         assertThat(actualGenreList)
-                .usingRecursiveFieldByFieldElementComparator()
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
                 .contains(expectedGenre);
         assertEquals(5, actualGenreList.size(), "Неверное количество записей");
     }
@@ -56,9 +57,10 @@ class GenreDaoJdbcTest {
                 .id(EXISTING_GENRE_ID)
                 .name(EXISTING_GENRE_NAME)
                 .build();
-        Optional<Genre> actualGenre = genreDaoJdbc.findByName(EXISTING_GENRE_NAME);
+        Optional<Genre> actualGenre = genreRepositoryJpa.findByName(EXISTING_GENRE_NAME);
         assertTrue(actualGenre.isPresent(), "Не найден автор");
-        assertThat(actualGenre.get()).usingRecursiveComparison().isEqualTo(expectedGenre);
+        assertTrue(new ReflectionEquals(expectedGenre, "books").matches(actualGenre.get()), "Неверная запись");
+        assertEquals(3, actualGenre.get().getBooks().size(), "Неверное количество книг");
     }
 
     @DisplayName("Тестирует поиск записи по id")
@@ -68,8 +70,9 @@ class GenreDaoJdbcTest {
                 .id(EXISTING_GENRE_ID)
                 .name(EXISTING_GENRE_NAME)
                 .build();
-        Optional<Genre> actualGenre = genreDaoJdbc.findById(expectedGenre.getId());
+        Optional<Genre> actualGenre = genreRepositoryJpa.findById(expectedGenre.getId());
         assertTrue(actualGenre.isPresent(), "Не найден автор");
-        assertThat(actualGenre.get()).usingRecursiveComparison().isEqualTo(expectedGenre);
+        assertTrue(new ReflectionEquals(expectedGenre, "books").matches(actualGenre.get()), "Неверная запись");
+        assertEquals(3, actualGenre.get().getBooks().size(), "Неверное количество книг");
     }
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.spring.belov.dao.BookDao;
+import ru.otus.spring.belov.repositories.BookRepository;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 class BookServiceImplTest {
 
     @Mock
-    private BookDao bookDao;
+    private BookRepository bookRepository;
     @Mock
     private GenreService genreService;
     @Mock
@@ -42,7 +42,7 @@ class BookServiceImplTest {
         when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
         when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
         bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-        verify(bookDao).save(argThat(actualSavedBook -> {
+        verify(bookRepository).saveOrUpdate(argThat(actualSavedBook -> {
             assertThat(actualSavedBook)
                     .usingRecursiveComparison()
                     .isEqualTo(expectedBook);
@@ -59,10 +59,10 @@ class BookServiceImplTest {
         var bookAuthor = expectedBook.getAuthor();
         when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
         when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-        when(bookDao.findById(expectedBook.getId()))
+        when(bookRepository.findById(expectedBook.getId()))
                 .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
         bookService.update(2, expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-        verify(bookDao).update(argThat(actualSavedBook -> {
+        verify(bookRepository).saveOrUpdate(argThat(actualSavedBook -> {
             assertThat(actualSavedBook)
                     .usingRecursiveComparison()
                     .isEqualTo(expectedBook);
@@ -73,8 +73,8 @@ class BookServiceImplTest {
     @DisplayName("Тест поиска по идентификатору книги")
     @Test
     void findById() {
-        when(bookDao.findById(1)).thenReturn(of(Book.builder().build()));
-        when(bookDao.findById(2)).thenReturn(empty());
+        when(bookRepository.findById(1)).thenReturn(of(Book.builder().build()));
+        when(bookRepository.findById(2)).thenReturn(empty());
         assertThatCode(() -> bookService.findById(1))
                 .doesNotThrowAnyException();
         assertThatThrownBy(() -> bookService.findById(2))
