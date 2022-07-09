@@ -1,6 +1,7 @@
 package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.belov.domain.Genre;
@@ -40,6 +41,14 @@ public class GenreServiceImpl implements GenreService {
     @Override
     public Optional<Genre> findByName(String name) {
         return genreRepository.findByName(name);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Optional<Genre> findByNameWithBooksAndComments(String name) {
+        var genre = findByName(name);
+        genre.ifPresent(genreDO -> Hibernate.initialize(genreDO.getBooks()));
+        return genre;
     }
 
     @Transactional(readOnly = true)

@@ -31,6 +31,13 @@ public interface GenreService {
     Optional<Genre> findByName(String name);
 
     /**
+     * Возвращает жанр по названию со всеми книгами и комментариями
+     * @param name название
+     * @return жанр
+     */
+    Optional<Genre> findByNameWithBooksAndComments(String name);
+
+    /**
      * Возвращает жанр по идентификатору
      * @param id идентификатор жанра
      * @return жанр
