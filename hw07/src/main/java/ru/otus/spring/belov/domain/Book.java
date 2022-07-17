@@ -1,27 +1,22 @@
 package ru.otus.spring.belov.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-
-import static javax.persistence.FetchType.EAGER;
-import static org.hibernate.annotations.FetchMode.SUBSELECT;
 
 /**
  * Книга
  */
 @Builder
 @Data
+@ToString(exclude = "comments")
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
+@NamedEntityGraph(name = "book-full", includeAllAttributes = true)
 public class Book {
 
     /** Идентификатор */
@@ -47,7 +42,6 @@ public class Book {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE, fetch = EAGER)
-    @Fetch(SUBSELECT)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
     private List<BookComment> comments;
 }

@@ -41,27 +41,7 @@ public class GenreCommands {
             Ищет жанр по названию
                         Пример: findGenre Роман""")
     public String findGenre(@ShellOption(value = {"name"}, help = "Название жанра") String name) {
-        return genreService.findByName(name).map(Genre::toString).orElse("Жанр не найден");
-    }
-
-    @ShellMethod(key = {"fgFull", "findGFull", "findGenreFull"}, value = """
-            Ищет жанр по названию и выводит все книги и комментарии к ним
-                        Пример: findGenreFull Поэма""")
-    public String findByNameWithBooksAndComments(@ShellOption(value = {"name"}, help = "Название жанра") String name) {
-        return genreService.findByNameWithBooksAndComments(name).map(this::getGenreFullAsString).orElse("Жанр не найден");
-    }
-
-    private String getGenreFullAsString(Genre genre) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Жанр: ").append(genre.getName()).append("\n");
-        sb.append("Книги:\n");
-        genre.getBooks().forEach(book -> {
-            sb.append("\t").append(book.getTitle()).append("\n");
-            sb.append("\t\t").append("Комментарии:\n");
-            book.getComments().forEach(comment ->
-                    sb.append("\t\t\t").append(comment.getText()).append("\n")
-            );
-        });
-        return sb.toString();
+        var genre = genreService.findByName(name);
+        return format("Жанр найден: %s", genre);
     }
 }

@@ -2,7 +2,6 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.repositories.AuthorRepository;
 
@@ -21,7 +20,6 @@ public class AuthorServiceImpl implements AuthorService {
     /** Репозиторий По работе с авторами */
     private final AuthorRepository authorRepository;
 
-    @Transactional
     @Override
     public Author save(String name, String birthday) {
         var author = Author.builder()
@@ -31,19 +29,16 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.save(author);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Author> findByNameContaining(String name) {
         return authorRepository.findByNameContainingIgnoreCase(name);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Author findById(long id) {
         return authorRepository.findById(id)

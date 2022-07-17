@@ -58,7 +58,7 @@ public class BookCommands {
                         Пример: findBook 1""")
     public String show(@ShellOption(value = {"id"}, help = "Идентификатор искомой книги") long id) {
         var book = bookService.findById(id);
-        return format("Книга найдена: %s", book);
+        return getBookWithCommentsAsString(book);
     }
 
     @ShellMethod(key = {"lb", "listBooks"}, value = "Выводит список книг")
@@ -80,5 +80,14 @@ public class BookCommands {
                 .map(Book::toString)
                 .collect(Collectors.joining("\n\t"))
         );
+    }
+
+    private String getBookWithCommentsAsString(Book book) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Книга:\n").append(book);
+        book.getComments().forEach(comment ->
+                sb.append("\t").append(comment).append("\n")
+        );
+        return sb.toString();
     }
 }

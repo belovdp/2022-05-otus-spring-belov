@@ -3,7 +3,6 @@ package ru.otus.spring.belov.service;
 import ru.otus.spring.belov.domain.Genre;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Сервис по работе с жанрами
@@ -28,14 +27,7 @@ public interface GenreService {
      * @param name название
      * @return жанр
      */
-    Optional<Genre> findByName(String name);
-
-    /**
-     * Возвращает жанр по названию со всеми книгами и комментариями
-     * @param name название
-     * @return жанр
-     */
-    Optional<Genre> findByNameWithBooksAndComments(String name);
+    Genre findByName(String name);
 
     /**
      * Возвращает жанр по идентификатору

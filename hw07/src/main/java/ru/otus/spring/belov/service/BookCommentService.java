@@ -39,6 +39,14 @@ public interface BookCommentService {
     BookComment findById(long id);
 
     /**
+     * Возвращает комментарии по идентификатору книги
+     * @param id идентификатор книги
+     * @return комментарии
+     */
+    List<BookComment> findBookCommentsByBookId(long id);
+
+
+    /**
      * Возвращает все комментарии
      * @return список всех комментариев
      */

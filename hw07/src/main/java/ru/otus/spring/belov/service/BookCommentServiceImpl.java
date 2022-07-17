@@ -2,7 +2,6 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.belov.domain.BookComment;
 import ru.otus.spring.belov.repositories.BookCommentRepository;
 
@@ -22,7 +21,6 @@ public class BookCommentServiceImpl implements BookCommentService {
     private final BookService bookService;
 
 
-    @Transactional
     @Override
     public BookComment save(String text, long bookId) {
         var book = bookService.findById(bookId);
@@ -33,7 +31,6 @@ public class BookCommentServiceImpl implements BookCommentService {
         return bookCommentRepository.save(bookComment);
     }
 
-    @Transactional
     @Override
     public BookComment update(long id, String text) {
         var bookComment = findById(id);
@@ -41,20 +38,23 @@ public class BookCommentServiceImpl implements BookCommentService {
         return bookCommentRepository.save(bookComment);
     }
 
-    @Transactional
     @Override
     public void deleteById(long id) {
         bookCommentRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public BookComment findById(long id) {
         return bookCommentRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(format("Не найден комментарий с идентификатором %d", id)));
     }
 
-    @Transactional(readOnly = true)
+    @Override
+    public List<BookComment> findBookCommentsByBookId(long id) {
+        var book = bookService.findById(id);
+        return book.getComments();
+    }
+
     @Override
     public List<BookComment> findAll() {
         return bookCommentRepository.findAll();

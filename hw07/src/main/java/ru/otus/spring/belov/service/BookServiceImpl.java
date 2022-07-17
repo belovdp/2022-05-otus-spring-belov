@@ -25,8 +25,6 @@ public class BookServiceImpl implements BookService {
     /** Репозиторий по работе с авторами */
     private final AuthorService authorService;
 
-
-    @Transactional
     @Override
     public Book save(String title, String published, long genreId, long authorId) {
         var genre = genreService.findById(genreId);
@@ -40,7 +38,6 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
-    @Transactional
     @Override
     public Book update(long id, String title, String published, long genreId, long authorId) {
         var genre = genreService.findById(genreId);
@@ -53,20 +50,17 @@ public class BookServiceImpl implements BookService {
         return bookRepository.save(book);
     }
 
-    @Transactional
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Book findById(long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %d", id)));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Book> findAll() {
         return bookRepository.findAll();
