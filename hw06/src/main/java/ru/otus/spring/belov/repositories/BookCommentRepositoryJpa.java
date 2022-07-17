@@ -1,7 +1,7 @@
 package ru.otus.spring.belov.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.spring.belov.domain.BookComment;
 
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ import static java.util.Optional.ofNullable;
 /**
  * Репозиторий по работе с комментариями книг через JPA
  */
-@Repository
+@Component
 @RequiredArgsConstructor
 public class BookCommentRepositoryJpa implements BookCommentRepository {
 
@@ -32,9 +32,7 @@ public class BookCommentRepositoryJpa implements BookCommentRepository {
 
     @Override
     public void deleteById(long id) {
-        entityManager.createQuery("delete from BookComment bc where bc.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
+        entityManager.remove(entityManager.find(BookComment.class, id));
     }
 
     @Override

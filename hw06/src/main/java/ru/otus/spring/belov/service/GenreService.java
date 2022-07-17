@@ -28,7 +28,7 @@ public interface GenreService {
      * @param name название
      * @return жанр
      */
-    Optional<Genre> findByName(String name);
+    Genre findByName(String name);
 
     /**
      * Возвращает жанр по идентификатору

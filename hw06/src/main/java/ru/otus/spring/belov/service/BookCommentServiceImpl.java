@@ -47,7 +47,6 @@ public class BookCommentServiceImpl implements BookCommentService {
         bookCommentRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public BookComment findById(long id) {
         return bookCommentRepository.findById(id)
@@ -55,6 +54,12 @@ public class BookCommentServiceImpl implements BookCommentService {
     }
 
     @Transactional(readOnly = true)
+    @Override
+    public List<BookComment> findBookCommentsByBookId(long id) {
+        var book = bookService.findById(id);
+        return book.getComments();
+    }
+
     @Override
     public List<BookComment> findAll() {
         return bookCommentRepository.findAll();

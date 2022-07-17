@@ -1,12 +1,14 @@
 package ru.otus.spring.belov.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.spring.belov.domain.Book;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static java.util.Optional.ofNullable;
@@ -14,7 +16,7 @@ import static java.util.Optional.ofNullable;
 /**
  * Репозиторий по работе с книгами через JPA
  */
-@Repository
+@Component
 @RequiredArgsConstructor
 public class BookRepositoryJpa implements BookRepository {
 
@@ -37,25 +39,14 @@ public class BookRepositoryJpa implements BookRepository {
 
     @Override
     public Optional<Book> findById(long id) {
-        return ofNullable(entityManager.find(Book.class, id));
+        EntityGraph<?> entityGraph = entityManager.getEntityGraph("book-full");
+        return ofNullable(entityManager.find(Book.class, id, Map.of("javax.persistence.fetchgraph", entityGraph)));
     }
 
     @Override
     public List<Book> findAll() {
         return entityManager
                 .createQuery("select b from Book b join fetch b.genre g join fetch b.author a", Book.class)
-                .getResultList();
-    }
-
-    @Override
-    public List<Book> findAllByGenreName(String genreName) {
-        return entityManager
-                .createQuery("""
-                            select b
-                            from Genre g join g.books b
-                            where g.name = :genreName
-                        """, Book.class)
-                .setParameter("genreName", genreName)
                 .getResultList();
     }
 }

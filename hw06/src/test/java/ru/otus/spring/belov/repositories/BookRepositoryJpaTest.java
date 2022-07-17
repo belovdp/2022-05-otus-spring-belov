@@ -2,6 +2,7 @@ package ru.otus.spring.belov.repositories;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -76,7 +77,7 @@ class BookRepositoryJpaTest {
         Book expectedBook = getExistingBook();
         Optional<Book> actualBook = bookRepositoryJpa.findById(expectedBook.getId());
         assertTrue(actualBook.isPresent(), "Не найдена книга");
-        assertThat(actualBook.get()).usingRecursiveComparison().isEqualTo(expectedBook);
+        assertTrue(new ReflectionEquals(expectedBook, "comments").matches(actualBook.get()));
     }
 
     @DisplayName("Тестирует поиск всех записей")
@@ -85,20 +86,9 @@ class BookRepositoryJpaTest {
         Book expectedBook = getExistingBook();
         List<Book> actualBookList = bookRepositoryJpa.findAll();
         assertThat(actualBookList)
-                .usingRecursiveFieldByFieldElementComparator()
+                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("comments")
                 .contains(expectedBook);
         assertEquals(6, actualBookList.size(), "Неверное количество записей");
-    }
-
-    @DisplayName("Тестирует поиск книг по названию жанра")
-    @Test
-    void findAllByGenreNameTest() {
-        Book expectedBook = getExistingBook();
-        List<Book> actualBookList = bookRepositoryJpa.findAllByGenreName("Фэнтези");
-        assertThat(actualBookList)
-                .usingRecursiveFieldByFieldElementComparator()
-                .contains(expectedBook);
-        assertEquals(3, actualBookList.size(), "Неверное количество записей");
     }
 
     private Book getExistingBook() {

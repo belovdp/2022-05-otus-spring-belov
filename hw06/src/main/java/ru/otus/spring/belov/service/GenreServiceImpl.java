@@ -30,19 +30,17 @@ public class GenreServiceImpl implements GenreService {
         return genreRepository.save(genre);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Genre> findAll() {
         return genreRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
-    public Optional<Genre> findByName(String name) {
-        return genreRepository.findByName(name);
+    public Genre findByName(String name) {
+        return genreRepository.findByName(name)
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с именем %s", name)));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Genre findById(long id) {
         return genreRepository.findById(id)

@@ -55,6 +55,16 @@ public class BookCommentCommands {
         return format("Комментарий найден: %s", bookComment);
     }
 
+    @ShellMethod(key = {"fbcByBookId", "findBookCommentsByBookId"}, value = """
+            Ищет комментарий по идентификатору.
+                        Пример: findBookCommentsByBookId 1""")
+    public String findBookCommentsByBookId(@ShellOption(value = {"id"}, help = "Идентификатор книги") long id) {
+        var bookComments = bookCommentService.findBookCommentsByBookId(id);
+        return format("Список комментариев:\n\t%s", bookComments.stream()
+                .map(BookComment::toString)
+                .collect(Collectors.joining("\n\t")));
+    }
+
     @ShellMethod(key = {"dbc", "delBookComment", "deleteBookComment"}, value = """
             Удаляет комментарий.
                         Пример: deleteBookComment 1""")

@@ -60,7 +60,7 @@ class BookCommentRepositoryJpaTest {
     void deleteByIdTest() {
         assertThat(bookCommentRepositoryJpa.findById(EXISTING_BOOK_COMMENT_ID)).isNotEmpty();
         bookCommentRepositoryJpa.deleteById(EXISTING_BOOK_COMMENT_ID);
-        em.clear();
+        em.flush();
         assertThat(bookCommentRepositoryJpa.findById(EXISTING_BOOK_COMMENT_ID)).isEmpty();
     }
 

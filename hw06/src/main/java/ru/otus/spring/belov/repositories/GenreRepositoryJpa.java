@@ -1,7 +1,7 @@
 package ru.otus.spring.belov.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.spring.belov.domain.Genre;
 
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ import static java.util.Optional.ofNullable;
 /**
  * Репозиторий по работе с жанрами через JPA
  */
-@Repository
+@Component
 @RequiredArgsConstructor
 public class GenreRepositoryJpa implements GenreRepository {
 

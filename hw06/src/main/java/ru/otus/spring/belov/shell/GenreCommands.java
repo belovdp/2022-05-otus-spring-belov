@@ -41,6 +41,7 @@ public class GenreCommands {
             Ищет жанр по названию
                         Пример: findGenre Роман""")
     public String findGenre(@ShellOption(value = {"name"}, help = "Название жанра") String name) {
-        return genreService.findByName(name).map(Genre::toString).orElse("Жанр не найден");
+        var genre = genreService.findByName(name);
+        return format("Жанр найден: %s", genre);
     }
 }

@@ -31,19 +31,16 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.save(author);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Author> findAll() {
         return authorRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Author> findByNameContaining(String name) {
         return authorRepository.findByNameContaining(name);
     }
 
-    @Transactional(readOnly = true)
     @Override
     public Author findById(long id) {
         return authorRepository.findById(id)

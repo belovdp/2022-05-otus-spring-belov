@@ -1,6 +1,7 @@
 package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.belov.domain.Book;
@@ -66,7 +67,6 @@ public class BookServiceImpl implements BookService {
                 .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %d", id)));
     }
 
-    @Transactional(readOnly = true)
     @Override
     public List<Book> findAll() {
         return bookRepository.findAll();
@@ -75,6 +75,8 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> findAllByGenreName(String genreName) {
-        return bookRepository.findAllByGenreName(genreName);
+        var genre = genreService.findByName(genreName);
+        Hibernate.initialize(genre.getBooks());
+        return genre.getBooks();
     }
 }

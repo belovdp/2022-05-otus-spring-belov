@@ -1,7 +1,7 @@
 package ru.otus.spring.belov.repositories;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 import ru.otus.spring.belov.domain.Author;
 
 import javax.persistence.EntityManager;
@@ -14,7 +14,7 @@ import static java.util.Optional.ofNullable;
 /**
  * Репозиторий по работе с авторами через JPA
  */
-@Repository
+@Component
 @RequiredArgsConstructor
 public class AuthorRepositoryJpa implements AuthorRepository {
 

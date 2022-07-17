@@ -35,11 +35,4 @@ public interface BookRepository {
      * @return список всех книг
      */
     List<Book> findAll();
-
-    /**
-     * Возвращает все книги по названию жанра
-     * @param genreName название жанра
-     * @return список всех книг по жанру
-     */
-    List<Book> findAllByGenreName(String genreName);
 }
