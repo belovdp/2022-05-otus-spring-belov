@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:library
+  liquibase:
+    change-log: classpath:liquibase/main.xml
+    contexts: test
+  main:
+    allow-circular-references: true
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
