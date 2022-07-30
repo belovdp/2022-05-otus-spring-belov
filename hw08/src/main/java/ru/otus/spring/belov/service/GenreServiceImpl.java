@@ -39,8 +39,8 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public Genre findById(long id) {
+    public Genre findById(String id) {
         return genreRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %d", id)));
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %s", id)));
     }
 }

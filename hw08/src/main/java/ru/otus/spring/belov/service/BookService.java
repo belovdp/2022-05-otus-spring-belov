@@ -17,7 +17,7 @@ public interface BookService {
      * @param authorId  идентификатор автора
      * @return книга
      */
-    Book save(String title, String published, long genreId, long authorId);
+    Book save(String title, String published, String genreId, String authorId);
 
     /**
      * Обновляет книгу
@@ -28,20 +28,20 @@ public interface BookService {
      * @param authorId  идентификатор автора
      * @return книга
      */
-    Book update(long id, String title, String published, long genreId, long authorId);
+    Book update(String id, String title, String published, String genreId, String authorId);
 
     /**
      * Удаляет книгу по идентификатору
      * @param id идентификатор книги
      */
-    void deleteById(long id);
+    void deleteById(String id);
 
     /**
      * Возвращает книгу по идентификатору
      * @param id идентификатор книги
      * @return книга
      */
-    Book findById(long id);
+    Book findById(String id);
 
     /**
      * Возвращает все книги

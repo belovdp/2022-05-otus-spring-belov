@@ -26,7 +26,7 @@ public class BookServiceImpl implements BookService {
     private final AuthorService authorService;
 
     @Override
-    public Book save(String title, String published, long genreId, long authorId) {
+    public Book save(String title, String published, String genreId, String authorId) {
         var genre = genreService.findById(genreId);
         var author = authorService.findById(authorId);
         var book = Book.builder()
@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book update(long id, String title, String published, long genreId, long authorId) {
+    public Book update(String id, String title, String published, String genreId, String authorId) {
         var genre = genreService.findById(genreId);
         var author = authorService.findById(authorId);
         var book = findById(id);
@@ -51,14 +51,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(String id) {
         bookRepository.deleteById(id);
     }
 
     @Override
-    public Book findById(long id) {
+    public Book findById(String id) {
         return bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %d", id)));
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %s", id)));
     }
 
     @Override
@@ -69,6 +69,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public List<Book> findAllByGenreName(String genreName) {
-        return bookRepository.findAllByGenreName(genreName);
+        var genre = genreService.findByName(genreName);
+        return bookRepository.findAllByGenreId(genre.getId());
     }
 }

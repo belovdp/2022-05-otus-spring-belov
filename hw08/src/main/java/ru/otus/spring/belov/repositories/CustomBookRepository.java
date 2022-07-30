@@ -1,13 +1,8 @@
-package ru.otus.spring.belov.service;
+package ru.otus.spring.belov.repositories;
 
 import ru.otus.spring.belov.domain.BookComment;
 
-import java.util.Set;
-
-/**
- * Сервис по работе с комментариями книг
- */
-public interface BookCommentService {
+public interface CustomBookRepository {
 
     /**
      * Сохраняет комментарий
@@ -15,7 +10,7 @@ public interface BookCommentService {
      * @param bookId идентификатор книги
      * @return комментарий
      */
-    BookComment save(String text, String bookId);
+    BookComment saveComment(String text, String bookId);
 
     /**
      * Обновляет комментарий
@@ -23,18 +18,11 @@ public interface BookCommentService {
      * @param text      текст комментария
      * @return комментарий
      */
-    BookComment update(String commentId, String text);
+    BookComment updateComment(String commentId, String text);
 
     /**
      * Удаляет книгу по идентификатору
      * @param commentId идентификатор комментария
      */
-    void deleteById(String commentId);
-
-    /**
-     * Возвращает комментарии по идентификатору книги
-     * @param id идентификатор книги
-     * @return комментарии
-     */
-    Set<BookComment> findBookCommentsByBookId(String id);
+    void deleteCommentById(String commentId);
 }

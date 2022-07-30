@@ -40,8 +40,8 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findById(long id) {
+    public Author findById(String id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", id)));
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %s", id)));
     }
 }

@@ -34,5 +34,5 @@ public interface GenreService {
      * @param id идентификатор жанра
      * @return жанр
      */
-    Genre findById(long id);
+    Genre findById(String id);
 }

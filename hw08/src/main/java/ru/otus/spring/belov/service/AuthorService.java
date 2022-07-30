@@ -35,5 +35,5 @@ public interface AuthorService {
      * @param id идентификатор автора
      * @return автор
      */
-    Author findById(long id);
+    Author findById(String id);
 }

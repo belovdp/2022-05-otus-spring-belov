@@ -27,8 +27,8 @@ public class BookCommands {
                         Пример: insertBook 'Война и мир' 1799-05-26 1 1""")
     public String insert(@ShellOption(value = {"title"}, help = "Название книги") String title,
                          @ShellOption(value = {"published"}, help = "Дата публикации книги") String published,
-                         @ShellOption(value = {"genreId"}, help = "Идентификатор жанра") long genreId,
-                         @ShellOption(value = {"authorId"}, help = "Идентификатор автора") long authorId) {
+                         @ShellOption(value = {"genreId"}, help = "Идентификатор жанра") String genreId,
+                         @ShellOption(value = {"authorId"}, help = "Идентификатор автора") String authorId) {
         var book = bookService.save(title, published, genreId, authorId);
         return format("Книга сохранёна: %s", book);
     }
@@ -36,11 +36,11 @@ public class BookCommands {
     @ShellMethod(key = {"ub", "updBook", "updateBook"}, value = """
             Изменяет книгу.
                         Пример: updateBook 1 'Война и мир' 1799-05-26 1 1""")
-    public String update(@ShellOption(value = {"id"}, help = "Идентификатор модифицируемой книги") long id,
+    public String update(@ShellOption(value = {"id"}, help = "Идентификатор модифицируемой книги") String id,
                          @ShellOption(value = {"title"}, help = "Название книги") String title,
                          @ShellOption(value = {"published"}, help = "Дата публикации книги") String published,
-                         @ShellOption(value = {"genreId"}, help = "Идентификатор жанра") long genreId,
-                         @ShellOption(value = {"authorId"}, help = "Идентификатор автора") long authorId) {
+                         @ShellOption(value = {"genreId"}, help = "Идентификатор жанра") String genreId,
+                         @ShellOption(value = {"authorId"}, help = "Идентификатор автора") String authorId) {
         var book = bookService.update(id, title, published, genreId, authorId);
         return format("Книга изменена: %s", book);
     }
@@ -48,7 +48,7 @@ public class BookCommands {
     @ShellMethod(key = {"db", "delBook", "deleteBook"}, value = """
             Удаляет книгу.
                         Пример: deleteBook 1""")
-    public String delete(@ShellOption(value = {"id"}, help = "Идентификатор удаляемой книги") long id) {
+    public String delete(@ShellOption(value = {"id"}, help = "Идентификатор удаляемой книги") String id) {
         bookService.deleteById(id);
         return format("Книга с идентификатором %s удалена", id);
     }
@@ -56,7 +56,7 @@ public class BookCommands {
     @ShellMethod(key = {"fb", "findBook"}, value = """
             Ищет книгу по идентификатору.
                         Пример: findBook 1""")
-    public String show(@ShellOption(value = {"id"}, help = "Идентификатор искомой книги") long id) {
+    public String show(@ShellOption(value = {"id"}, help = "Идентификатор искомой книги") String id) {
         var book = bookService.findById(id);
         return getBookWithCommentsAsString(book);
     }
@@ -84,7 +84,7 @@ public class BookCommands {
 
     private String getBookWithCommentsAsString(Book book) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Книга:\n").append(book);
+        sb.append("Книга:\n").append(book).append("\n");
         book.getComments().forEach(comment ->
                 sb.append("\t").append(comment).append("\n")
         );
