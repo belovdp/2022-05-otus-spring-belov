@@ -43,7 +43,8 @@ public class CustomBookRepositoryImpl implements CustomBookRepository {
 
     @Override
     public void deleteCommentById(String commentId) {
+        Query query = new Query().addCriteria(Criteria.where("comments.id").is(commentId));
         Update update = new Update().pull("comments", Query.query(Criteria.where("id").is(commentId)));
-        template.findAndModify(new Query(), update, Book.class);
+        template.findAndModify(query, update, Book.class);
     }
 }

@@ -36,58 +36,58 @@ class BookServiceImplTest {
     @DisplayName("Тест сохарения книги")
     @Test
     void saveTest() {
-//        var expectedBook = getBookForSave();
-//        var bookGenre = expectedBook.getGenre();
-//        var bookAuthor = expectedBook.getAuthor();
-//        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
-//        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-//        bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-//        verify(bookRepository).save(argThat(actualSavedBook -> {
-//            assertThat(actualSavedBook)
-//                    .usingRecursiveComparison()
-//                    .isEqualTo(expectedBook);
-//            return true;
-//        }));
+        var expectedBook = getBookForSave();
+        var bookGenre = expectedBook.getGenre();
+        var bookAuthor = expectedBook.getAuthor();
+        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
+        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
+        bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
+        verify(bookRepository).save(argThat(actualSavedBook -> {
+            assertThat(actualSavedBook)
+                    .usingRecursiveComparison()
+                    .isEqualTo(expectedBook);
+            return true;
+        }));
     }
 
     @DisplayName("Тест обновления книги")
     @Test
     void updateTest() {
-//        var expectedBook = getBookForSave();
-//        expectedBook.setId("2");
-//        var bookGenre = expectedBook.getGenre();
-//        var bookAuthor = expectedBook.getAuthor();
-//        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
-//        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-//        when(bookRepository.findById(expectedBook.getId()))
-//                .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
-//        bookService.update(2, expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-//        verify(bookRepository).save(argThat(actualSavedBook -> {
-//            assertThat(actualSavedBook)
-//                    .usingRecursiveComparison()
-//                    .isEqualTo(expectedBook);
-//            return true;
-//        }));
+        var expectedBook = getBookForSave();
+        expectedBook.setId("2");
+        var bookGenre = expectedBook.getGenre();
+        var bookAuthor = expectedBook.getAuthor();
+        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
+        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
+        when(bookRepository.findById(expectedBook.getId()))
+                .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
+        bookService.update("2", expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
+        verify(bookRepository).save(argThat(actualSavedBook -> {
+            assertThat(actualSavedBook)
+                    .usingRecursiveComparison()
+                    .isEqualTo(expectedBook);
+            return true;
+        }));
     }
 
     @DisplayName("Тест поиска по идентификатору книги")
     @Test
     void findById() {
-//        when(bookRepository.findById(1L)).thenReturn(of(Book.builder().build()));
-//        when(bookRepository.findById(2L)).thenReturn(empty());
-//        assertThatCode(() -> bookService.findById(1))
-//                .doesNotThrowAnyException();
-//        assertThatThrownBy(() -> bookService.findById(2))
-//                .isInstanceOf(IllegalArgumentException.class);
+        when(bookRepository.findById("1")).thenReturn(of(Book.builder().build()));
+        when(bookRepository.findById("2")).thenReturn(empty());
+        assertThatCode(() -> bookService.findById("1"))
+                .doesNotThrowAnyException();
+        assertThatThrownBy(() -> bookService.findById("2"))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 
     private Book getBookForSave() {
-//        var bookGenre = Genre.builder().id(1L).name("Фэнтези").build();
+        var bookGenre = Genre.builder().id("1").name("Фэнтези").build();
         var bookAuthor = Author.builder().id("1").name("Пупкин").birthday(LocalDate.now()).build();
         return Book.builder()
                 .title("testTitle")
                 .published(LocalDate.now())
-//                .genre(bookGenre)
+                .genre(bookGenre)
                 .author(bookAuthor)
                 .build();
     }
