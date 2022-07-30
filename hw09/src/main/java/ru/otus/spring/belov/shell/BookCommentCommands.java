@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.spring.belov.domain.BookComment;
+import ru.otus.spring.belov.dto.BookCommentDto;
 import ru.otus.spring.belov.service.BookCommentService;
 
 import java.util.stream.Collectors;
@@ -41,9 +41,9 @@ public class BookCommentCommands {
 
     @ShellMethod(key = {"lbc", "listBookComment"}, value = "Выводит список комментариев")
     public String showAll() {
-        var bookComments = bookCommentService.findAll();
+        var bookComments = bookCommentService.getAll();
         return format("Список комментариев:\n\t%s", bookComments.stream()
-                .map(BookComment::toString)
+                .map(BookCommentDto::toString)
                 .collect(Collectors.joining("\n\t")));
     }
 
@@ -51,7 +51,7 @@ public class BookCommentCommands {
             Ищет комментарий по идентификатору.
                         Пример: findBookComment 1""")
     public String show(@ShellOption(value = {"id"}, help = "Идентификатор искомого комментария") long id) {
-        var bookComment = bookCommentService.findById(id);
+        var bookComment = bookCommentService.getById(id);
         return format("Комментарий найден: %s", bookComment);
     }
 
@@ -59,9 +59,9 @@ public class BookCommentCommands {
             Ищет комментарий по идентификатору.
                         Пример: findBookCommentsByBookId 1""")
     public String findBookCommentsByBookId(@ShellOption(value = {"id"}, help = "Идентификатор книги") long id) {
-        var bookComments = bookCommentService.findBookCommentsByBookId(id);
+        var bookComments = bookCommentService.getBookCommentsByBookId(id);
         return format("Список комментариев:\n\t%s", bookComments.stream()
-                .map(BookComment::toString)
+                .map(BookCommentDto::toString)
                 .collect(Collectors.joining("\n\t")));
     }
 

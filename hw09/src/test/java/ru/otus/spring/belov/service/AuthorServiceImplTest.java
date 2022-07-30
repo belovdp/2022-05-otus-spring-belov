@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.belov.domain.Author;
+import ru.otus.spring.belov.dto.mappers.AuthorMapper;
 import ru.otus.spring.belov.repositories.AuthorRepository;
 
 import java.time.LocalDate;
@@ -24,6 +25,8 @@ class AuthorServiceImplTest {
 
     @Mock
     private AuthorRepository authorRepository;
+    @Mock
+    private AuthorMapper mapper;
     @InjectMocks
     private AuthorServiceImpl authorService;
 
@@ -48,9 +51,9 @@ class AuthorServiceImplTest {
     void findByIdTest() {
         when(authorRepository.findById(1L)).thenReturn(of(Author.builder().build()));
         when(authorRepository.findById(2L)).thenReturn(empty());
-        assertThatCode(() -> authorService.findById(1))
+        assertThatCode(() -> authorService.getById(1))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> authorService.findById(2))
+        assertThatThrownBy(() -> authorService.getById(2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

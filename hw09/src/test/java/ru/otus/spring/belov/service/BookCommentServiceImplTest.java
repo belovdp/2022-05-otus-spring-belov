@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.BookComment;
+import ru.otus.spring.belov.dto.mappers.BookCommentMapper;
 import ru.otus.spring.belov.repositories.BookCommentRepository;
 
 import static java.util.Optional.empty;
@@ -25,6 +26,8 @@ class BookCommentServiceImplTest {
     private BookCommentRepository bookCommentRepository;
     @Mock
     private BookService bookService;
+    @Mock
+    private BookCommentMapper mapper;
     @InjectMocks
     private BookCommentServiceImpl bookCommentService;
 
@@ -64,9 +67,9 @@ class BookCommentServiceImplTest {
     void findById() {
         when(bookCommentRepository.findById(1L)).thenReturn(of(BookComment.builder().build()));
         when(bookCommentRepository.findById(2L)).thenReturn(empty());
-        assertThatCode(() -> bookCommentService.findById(1))
+        assertThatCode(() -> bookCommentService.getById(1))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> bookCommentService.findById(2))
+        assertThatThrownBy(() -> bookCommentService.getById(2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

@@ -1,6 +1,7 @@
 package ru.otus.spring.belov.service;
 
 import ru.otus.spring.belov.domain.Author;
+import ru.otus.spring.belov.dto.AuthorDto;
 
 import java.util.List;
 
@@ -15,23 +16,30 @@ public interface AuthorService {
      * @param birthday день рождения
      * @return автор
      */
-    Author save(String name, String birthday);
+    AuthorDto save(String name, String birthday);
 
     /**
      * Возвращает всех авторов
      * @return список всех авторов
      */
-    List<Author> findAll();
+    List<AuthorDto> getAll();
 
     /**
      * Возвращает автора содержащего в имени искомую строку
      * @param name строка поиска
      * @return автор содержащий в имени искомую строку
      */
-    List<Author> findByNameContaining(String name);
+    List<AuthorDto> getByNameContaining(String name);
 
     /**
      * Возвращает автора по идентификатору
+     * @param id идентификатор автора
+     * @return автор
+     */
+    AuthorDto getById(long id);
+
+    /**
+     * Возвращает сущность автора по идентификатору
      * @param id идентификатор автора
      * @return автор
      */

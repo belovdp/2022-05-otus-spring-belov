@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.dto.mappers.GenreMapper;
 import ru.otus.spring.belov.repositories.GenreRepository;
 
 import static java.util.Optional.empty;
@@ -22,6 +23,8 @@ class GenreServiceImplTest {
 
     @Mock
     private GenreRepository genreRepository;
+    @Mock
+    private GenreMapper mapper;
     @InjectMocks
     private GenreServiceImpl genreService;
 
@@ -45,9 +48,9 @@ class GenreServiceImplTest {
     void findByIdTest() {
         when(genreRepository.findById(1L)).thenReturn(of(Genre.builder().build()));
         when(genreRepository.findById(2L)).thenReturn(empty());
-        assertThatCode(() -> genreService.findById(1))
+        assertThatCode(() -> genreService.getById(1))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> genreService.findById(2))
+        assertThatThrownBy(() -> genreService.getById(2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

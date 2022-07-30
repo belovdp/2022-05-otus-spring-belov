@@ -1,6 +1,8 @@
 package ru.otus.spring.belov.service;
 
 import ru.otus.spring.belov.domain.Book;
+import ru.otus.spring.belov.dto.BookDto;
+import ru.otus.spring.belov.dto.BookWithCommentsDto;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public interface BookService {
      * @param authorId  идентификатор автора
      * @return книга
      */
-    Book save(String title, String published, long genreId, long authorId);
+    BookDto save(String title, String published, long genreId, long authorId);
 
     /**
      * Обновляет книгу
@@ -28,7 +30,7 @@ public interface BookService {
      * @param authorId  идентификатор автора
      * @return книга
      */
-    Book update(long id, String title, String published, long genreId, long authorId);
+    BookDto update(long id, String title, String published, long genreId, long authorId);
 
     /**
      * Удаляет книгу по идентификатору
@@ -41,18 +43,25 @@ public interface BookService {
      * @param id идентификатор книги
      * @return книга
      */
-    Book findById(long id);
+    BookWithCommentsDto getById(long id);
 
     /**
      * Возвращает все книги
      * @return список всех книг
      */
-    List<Book> findAll();
+    List<BookDto> getAll();
 
     /**
      * Возвращает все книги по названию жанра
      * @param genreName название жанра
      * @return список всех книг по жанру
      */
-    List<Book> findAllByGenreName(String genreName);
+    List<BookDto> getAllByGenreName(String genreName);
+
+    /**
+     * Возвращает сущность книги по идентификатору
+     * @param id идентификатор книги
+     * @return книга
+     */
+    Book findById(long id);
 }

@@ -3,6 +3,8 @@ package ru.otus.spring.belov.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.Author;
+import ru.otus.spring.belov.dto.AuthorDto;
+import ru.otus.spring.belov.dto.mappers.AuthorMapper;
 import ru.otus.spring.belov.repositories.AuthorRepository;
 
 import java.time.LocalDate;
@@ -19,24 +21,31 @@ public class AuthorServiceImpl implements AuthorService {
 
     /** Репозиторий По работе с авторами */
     private final AuthorRepository authorRepository;
+    /** Преобразователь сущностей в DTO */
+    private final AuthorMapper mapper;
 
     @Override
-    public Author save(String name, String birthday) {
+    public AuthorDto save(String name, String birthday) {
         var author = Author.builder()
                 .name(name)
                 .birthday(LocalDate.parse(birthday))
                 .build();
-        return authorRepository.save(author);
+        return mapper.toDto(authorRepository.save(author));
     }
 
     @Override
-    public List<Author> findAll() {
-        return authorRepository.findAll();
+    public List<AuthorDto> getAll() {
+        return mapper.toDto(authorRepository.findAll());
     }
 
     @Override
-    public List<Author> findByNameContaining(String name) {
-        return authorRepository.findByNameContainingIgnoreCase(name);
+    public List<AuthorDto> getByNameContaining(String name) {
+        return mapper.toDto(authorRepository.findByNameContainingIgnoreCase(name));
+    }
+
+    @Override
+    public AuthorDto getById(long id) {
+        return mapper.toDto(findById(id));
     }
 
     @Override

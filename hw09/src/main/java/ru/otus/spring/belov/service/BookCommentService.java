@@ -1,6 +1,7 @@
 package ru.otus.spring.belov.service;
 
 import ru.otus.spring.belov.domain.BookComment;
+import ru.otus.spring.belov.dto.BookCommentDto;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface BookCommentService {
      * @param bookId идентификатор книги
      * @return комментарий
      */
-    BookComment save(String text, long bookId);
+    BookCommentDto save(String text, long bookId);
 
     /**
      * Обновляет комментарий
@@ -23,7 +24,7 @@ public interface BookCommentService {
      * @param text текст комментария
      * @return комментарий
      */
-    BookComment update(long id, String text);
+    BookCommentDto update(long id, String text);
 
     /**
      * Удаляет книгу по идентификатору
@@ -32,23 +33,30 @@ public interface BookCommentService {
     void deleteById(long id);
 
     /**
-     * Возвращает комментарий по идентификатору
-     * @param id идентификатор комментария
-     * @return комментарий
-     */
-    BookComment findById(long id);
-
-    /**
      * Возвращает комментарии по идентификатору книги
      * @param id идентификатор книги
      * @return комментарии
      */
-    List<BookComment> findBookCommentsByBookId(long id);
+    List<BookCommentDto> getBookCommentsByBookId(long id);
 
 
     /**
      * Возвращает все комментарии
      * @return список всех комментариев
      */
-    List<BookComment> findAll();
+    List<BookCommentDto> getAll();
+
+    /**
+     * Возвращает комментарий по идентификатору
+     * @param id идентификатор комментария
+     * @return комментарий
+     */
+    BookCommentDto getById(long id);
+
+    /**
+     * Возвращает комментарий по идентификатору
+     * @param id идентификатор комментария
+     * @return комментарий
+     */
+    BookComment findById(long id);
 }

@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.dto.mappers.BookMapper;
 import ru.otus.spring.belov.repositories.BookRepository;
 
 import java.time.LocalDate;
@@ -30,6 +31,8 @@ class BookServiceImplTest {
     private GenreService genreService;
     @Mock
     private AuthorService authorService;
+    @Mock
+    private BookMapper mapper;
     @InjectMocks
     private BookServiceImpl bookService;
 
@@ -75,9 +78,9 @@ class BookServiceImplTest {
     void findById() {
         when(bookRepository.findById(1L)).thenReturn(of(Book.builder().build()));
         when(bookRepository.findById(2L)).thenReturn(empty());
-        assertThatCode(() -> bookService.findById(1))
+        assertThatCode(() -> bookService.getById(1))
                 .doesNotThrowAnyException();
-        assertThatThrownBy(() -> bookService.findById(2))
+        assertThatThrownBy(() -> bookService.getById(2))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 

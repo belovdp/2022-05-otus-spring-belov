@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.spring.belov.domain.Author;
+import ru.otus.spring.belov.dto.AuthorDto;
 import ru.otus.spring.belov.service.AuthorService;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class AuthorCommands {
 
     @ShellMethod(key = {"la", "listAuthors"}, value = "Выводит список авторов")
     public String showAll() {
-        var authors = authorService.findAll();
+        var authors = authorService.getAll();
         return getAuthorsAsString(authors);
     }
 
@@ -41,13 +41,13 @@ public class AuthorCommands {
             Ищет автора, содержащего в ФИО искомую строку
                         Пример: findAuthor Пушк""")
     public String findAuthor(@ShellOption(value = {"name"}, help = "Строка поиска по ФИО автора") String name) {
-        var authors = authorService.findByNameContaining(name);
+        var authors = authorService.getByNameContaining(name);
         return getAuthorsAsString(authors);
     }
 
-    private String getAuthorsAsString(List<Author> authors) {
+    private String getAuthorsAsString(List<AuthorDto> authors) {
         return format("Список авторов:\n\t%s", authors.stream()
-                .map(Author::toString)
+                .map(AuthorDto::toString)
                 .collect(Collectors.joining("\n\t"))
         );
     }

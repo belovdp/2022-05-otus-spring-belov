@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.dto.GenreDto;
 import ru.otus.spring.belov.service.GenreService;
 
 import java.util.stream.Collectors;
@@ -33,7 +33,7 @@ public class GenreCommands {
     public String showAll() {
         var genres = genreService.findAll();
         return format("Список жанров:\n\t%s", genres.stream()
-                .map(Genre::toString)
+                .map(GenreDto::toString)
                 .collect(Collectors.joining("\n\t")));
     }
 
@@ -41,7 +41,7 @@ public class GenreCommands {
             Ищет жанр по названию
                         Пример: findGenre Роман""")
     public String findGenre(@ShellOption(value = {"name"}, help = "Название жанра") String name) {
-        var genre = genreService.findByName(name);
+        var genre = genreService.getByName(name);
         return format("Жанр найден: %s", genre);
     }
 }

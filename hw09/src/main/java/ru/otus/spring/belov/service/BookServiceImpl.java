@@ -4,6 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.belov.domain.Book;
+import ru.otus.spring.belov.dto.BookDto;
+import ru.otus.spring.belov.dto.BookWithCommentsDto;
+import ru.otus.spring.belov.dto.mappers.BookMapper;
 import ru.otus.spring.belov.repositories.BookRepository;
 
 import java.time.LocalDate;
@@ -24,9 +27,11 @@ public class BookServiceImpl implements BookService {
     private final GenreService genreService;
     /** Репозиторий по работе с авторами */
     private final AuthorService authorService;
+    /** Преобразователь сущностей в DTO */
+    private final BookMapper mapper;
 
     @Override
-    public Book save(String title, String published, long genreId, long authorId) {
+    public BookDto save(String title, String published, long genreId, long authorId) {
         var genre = genreService.findById(genreId);
         var author = authorService.findById(authorId);
         var book = Book.builder()
@@ -35,11 +40,11 @@ public class BookServiceImpl implements BookService {
                 .genre(genre)
                 .author(author)
                 .build();
-        return bookRepository.save(book);
+        return mapper.toDto(bookRepository.save(book));
     }
 
     @Override
-    public Book update(long id, String title, String published, long genreId, long authorId) {
+    public BookDto update(long id, String title, String published, long genreId, long authorId) {
         var genre = genreService.findById(genreId);
         var author = authorService.findById(authorId);
         var book = findById(id);
@@ -47,12 +52,19 @@ public class BookServiceImpl implements BookService {
         book.setPublished(LocalDate.parse(published));
         book.setGenre(genre);
         book.setAuthor(author);
-        return bookRepository.save(book);
+        return mapper.toDto(bookRepository.save(book));
     }
 
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
+    }
+
+    @Override
+    public BookWithCommentsDto getById(long id) {
+        var book = bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %d", id)));
+        return mapper.toDtoWithComments(book);
     }
 
     @Override
@@ -62,13 +74,13 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public List<BookDto> getAll() {
+        return mapper.toDto(bookRepository.findAll());
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Book> findAllByGenreName(String genreName) {
-        return bookRepository.findAllByGenreName(genreName);
+    public List<BookDto> getAllByGenreName(String genreName) {
+        return mapper.toDto(bookRepository.findAllByGenreName(genreName));
     }
 }
