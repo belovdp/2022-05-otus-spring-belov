@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.belov.domain.Author;
 
 import java.time.LocalDate;
@@ -50,17 +49,6 @@ class AuthorRepositoryTest {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
                 .contains(expectedAuthor);
         assertEquals(4, actualAuthorList.size(), "Неверное количество записей");
-    }
-
-    @DisplayName("Тестирует поиск записи по имени автора")
-    @Test
-    void findByNameContainingTest() {
-        var authors = authorRepository.findByNameContainingIgnoreCase("орд");
-        assertEquals(1, authors.size());
-        assertEquals(2, authors.get(0).getId());
-        authors = authorRepository.findByNameContainingIgnoreCase("ев");
-        assertEquals(2, authors.size());
-        assertTrue(List.of(1L, 3L).containsAll(authors.stream().map(Author::getId).toList()));
     }
 
     @DisplayName("Тестирует поиск записи по id")

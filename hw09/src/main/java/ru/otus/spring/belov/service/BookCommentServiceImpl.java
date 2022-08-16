@@ -5,10 +5,8 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.BookComment;
 import ru.otus.spring.belov.dto.BookCommentDto;
 import ru.otus.spring.belov.dto.mappers.BookCommentMapper;
-import ru.otus.spring.belov.exceptions.NotFoundException;
 import ru.otus.spring.belov.repositories.BookCommentRepository;
-
-import java.util.List;
+import ru.otus.spring.belov.repositories.BookRepository;
 
 import static java.lang.String.format;
 
@@ -21,49 +19,15 @@ public class BookCommentServiceImpl implements BookCommentService {
 
     /** Репозиторий по работе с книгами */
     private final BookCommentRepository bookCommentRepository;
-    private final BookService bookService;
+    private final BookRepository bookRepository;
     /** Преобразователь сущностей в DTO */
     private final BookCommentMapper mapper;
 
-
     @Override
     public BookCommentDto save(BookComment bookComment, long bookId) {
-        var book = bookService.findById(bookId);
+        var book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найдена книга с идентификатором %d", bookId)));
         bookComment.setBook(book);
         return mapper.toDto(bookCommentRepository.save(bookComment));
-    }
-
-    @Override
-    public BookCommentDto update(long id, String text) {
-        var bookComment = findById(id);
-        bookComment.setText(text);
-        return mapper.toDto(bookCommentRepository.save(bookComment));
-    }
-
-    @Override
-    public void deleteById(long id) {
-        bookCommentRepository.deleteById(id);
-    }
-
-
-    @Override
-    public List<BookCommentDto> getBookCommentsByBookId(long id) {
-        var book = bookService.findById(id);
-        return mapper.toDto(book.getComments());
-    }
-
-    @Override
-    public List<BookCommentDto> getAll() {
-        return mapper.toDto(bookCommentRepository.findAll());
-    }
-
-    @Override
-    public BookCommentDto getById(long id) {
-        return mapper.toDto(findById(id));
-    }
-
-    private BookComment findById(long id) {
-        return bookCommentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(format("Не найден автор с идентификатором %d", id)));
     }
 }

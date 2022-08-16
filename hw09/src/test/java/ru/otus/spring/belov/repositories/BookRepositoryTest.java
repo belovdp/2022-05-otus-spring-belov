@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
@@ -87,17 +86,6 @@ class BookRepositoryTest {
                 .usingRecursiveFieldByFieldElementComparator()
                 .contains(expectedBook);
         assertEquals(6, actualBookList.size(), "Неверное количество записей");
-    }
-
-    @DisplayName("Тестирует поиск книг по названию жанра")
-    @Test
-    void findAllByGenreNameTest() {
-        Book expectedBook = getExistingBook();
-        List<Book> actualBookList = bookRepository.findAllByGenreName("Фэнтези");
-        assertThat(actualBookList)
-                .usingRecursiveFieldByFieldElementComparator()
-                .contains(expectedBook);
-        assertEquals(3, actualBookList.size(), "Неверное количество записей");
     }
 
     private Book getExistingBook() {

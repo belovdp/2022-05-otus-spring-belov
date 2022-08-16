@@ -15,11 +15,4 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
      * @return список всех авторов
      */
     List<Author> findAll();
-
-    /**
-     * Возвращает автора содержащего в имени искомую строку
-     * @param name строка поиска
-     * @return автор содержащий в имени искомую строку
-     */
-    List<Author> findByNameContainingIgnoreCase(String name);
 }

@@ -40,7 +40,7 @@ public class BookController {
      */
     @GetMapping("/book/{id}/view")
     public String showById(@PathVariable Long id, Model model) {
-        model.addAttribute("book", bookService.findById(id));
+        model.addAttribute("book", bookService.getById(id));
         return "book/view";
     }
 

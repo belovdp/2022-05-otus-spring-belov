@@ -2,7 +2,6 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
@@ -70,20 +69,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Book findById(long id) {
-        return bookRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(format("Не найдена книга с идентификатором %d", id)));
-    }
-
-    @Override
     public List<BookDto> getAll() {
         return mapper.toDto(bookRepository.findAll());
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<BookDto> getAllByGenreName(String genreName) {
-        return mapper.toDto(bookRepository.findAllByGenreName(genreName));
     }
 
     private Genre getGenreById(long id) {
@@ -94,5 +81,10 @@ public class BookServiceImpl implements BookService {
     private Author getAuthorById(long id) {
         return authorRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(format("Не найден автор с идентификатором %d", id)));
+    }
+
+    private Book findById(long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(format("Не найдена книга с идентификатором %d", id)));
     }
 }

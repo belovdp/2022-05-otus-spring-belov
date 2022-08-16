@@ -13,13 +13,6 @@ import java.util.Optional;
 public interface BookRepository extends JpaRepository<Book, Long> {
 
     /**
-     * Возвращает все книги по названию жанра
-     * @param genreName название жанра
-     * @return список всех книг по жанру
-     */
-    List<Book> findAllByGenreName(String genreName);
-
-    /**
      * Возвращает книгу по идентификатору, подгружая все связи
      * @param id идентификатор книги
      * @return книга со всеми прогруженными связями

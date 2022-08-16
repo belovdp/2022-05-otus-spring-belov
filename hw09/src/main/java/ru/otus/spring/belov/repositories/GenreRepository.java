@@ -16,11 +16,4 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
      * @return список всех жанров
      */
     List<Genre> findAll();
-
-    /**
-     * Возвращает жанр по названию
-     * @param name название
-     * @return жанр
-     */
-    Optional<Genre> findByName(String name);
 }

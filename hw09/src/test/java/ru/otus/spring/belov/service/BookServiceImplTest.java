@@ -10,6 +10,7 @@ import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
 import ru.otus.spring.belov.dto.mappers.BookMapper;
+import ru.otus.spring.belov.exceptions.NotFoundException;
 import ru.otus.spring.belov.repositories.BookRepository;
 
 import java.time.LocalDate;
@@ -81,7 +82,7 @@ class BookServiceImplTest {
         assertThatCode(() -> bookService.getById(1))
                 .doesNotThrowAnyException();
         assertThatThrownBy(() -> bookService.getById(2))
-                .isInstanceOf(IllegalArgumentException.class);
+                .isInstanceOf(NotFoundException.class);
     }
 
     private Book getBookForSave() {

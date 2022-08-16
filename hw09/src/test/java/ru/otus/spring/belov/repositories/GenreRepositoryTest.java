@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.belov.domain.Genre;
 
 import java.util.List;
@@ -47,19 +46,6 @@ class GenreRepositoryTest {
                 .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
                 .contains(expectedGenre);
         assertEquals(5, actualGenreList.size(), "Неверное количество записей");
-    }
-
-    @DisplayName("Тестирует поиск записи по имени автора")
-    @Test
-    void findByNameTest() {
-        Genre expectedGenre = Genre.builder()
-                .id(EXISTING_GENRE_ID)
-                .name(EXISTING_GENRE_NAME)
-                .build();
-        Optional<Genre> actualGenre = genreRepository.findByName(EXISTING_GENRE_NAME);
-        assertTrue(actualGenre.isPresent(), "Не найден автор");
-        assertTrue(new ReflectionEquals(expectedGenre, "books").matches(actualGenre.get()), "Неверная запись");
-        assertEquals(3, actualGenre.get().getBooks().size(), "Неверное количество книг");
     }
 
     @DisplayName("Тестирует поиск записи по id")

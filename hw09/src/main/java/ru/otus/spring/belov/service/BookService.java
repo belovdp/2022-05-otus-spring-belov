@@ -47,18 +47,4 @@ public interface BookService {
      * @return список всех книг
      */
     List<BookDto> getAll();
-
-    /**
-     * Возвращает все книги по названию жанра
-     * @param genreName название жанра
-     * @return список всех книг по жанру
-     */
-    List<BookDto> getAllByGenreName(String genreName);
-
-    /**
-     * Возвращает сущность книги по идентификатору
-     * @param id идентификатор книги
-     * @return книга
-     */
-    Book findById(long id);
 }
