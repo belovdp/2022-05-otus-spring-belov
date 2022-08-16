@@ -12,11 +12,11 @@ public interface BookCommentService {
 
     /**
      * Сохраняет комментарий
-     * @param text   текст комментария
-     * @param bookId идентификатор книги
+     * @param bookComment комментарий к книге
+     * @param bookId      идентификатор книги
      * @return комментарий
      */
-    BookCommentDto save(String text, long bookId);
+    BookCommentDto save(BookComment bookComment, long bookId);
 
     /**
      * Обновляет комментарий
@@ -52,11 +52,4 @@ public interface BookCommentService {
      * @return комментарий
      */
     BookCommentDto getById(long id);
-
-    /**
-     * Возвращает комментарий по идентификатору
-     * @param id идентификатор комментария
-     * @return комментарий
-     */
-    BookComment findById(long id);
 }

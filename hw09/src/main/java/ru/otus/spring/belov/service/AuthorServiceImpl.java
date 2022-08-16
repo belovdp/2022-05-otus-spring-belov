@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.dto.AuthorDto;
 import ru.otus.spring.belov.dto.mappers.AuthorMapper;
+import ru.otus.spring.belov.exceptions.NotFoundException;
 import ru.otus.spring.belov.repositories.AuthorRepository;
 
 import java.time.LocalDate;
@@ -48,9 +49,8 @@ public class AuthorServiceImpl implements AuthorService {
         return mapper.toDto(findById(id));
     }
 
-    @Override
-    public Author findById(long id) {
+    private Author findById(long id) {
         return authorRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", id)));
+                .orElseThrow(() -> new NotFoundException(format("Не найден автор с идентификатором %d", id)));
     }
 }

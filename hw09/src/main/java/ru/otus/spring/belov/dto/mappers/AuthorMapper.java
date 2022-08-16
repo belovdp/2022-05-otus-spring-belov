@@ -10,4 +10,5 @@ import java.util.List;
 public interface AuthorMapper {
    AuthorDto toDto(Author author);
    List<AuthorDto> toDto(List<Author> author);
+   Author fromDto(AuthorDto authorDto);
 }

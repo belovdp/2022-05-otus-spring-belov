@@ -13,5 +13,7 @@ public interface BookMapper {
 
     BookWithCommentsDto toDtoWithComments(Book book);
 
-    List<BookDto> toDto(List<Book> genres);
+    List<BookDto> toDto(List<Book> books);
+
+    Book fromDto(BookDto bookDto);
 }

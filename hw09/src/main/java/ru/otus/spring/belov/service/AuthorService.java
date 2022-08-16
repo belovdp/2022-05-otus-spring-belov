@@ -37,11 +37,4 @@ public interface AuthorService {
      * @return автор
      */
     AuthorDto getById(long id);
-
-    /**
-     * Возвращает сущность автора по идентификатору
-     * @param id идентификатор автора
-     * @return автор
-     */
-    Author findById(long id);
 }

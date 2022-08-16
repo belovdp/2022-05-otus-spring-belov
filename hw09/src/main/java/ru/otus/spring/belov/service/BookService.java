@@ -13,13 +13,10 @@ public interface BookService {
 
     /**
      * Сохраняет книгу
-     * @param title     название книги
-     * @param published дата публикации
-     * @param genreId   идентификатор жанра
-     * @param authorId  идентификатор автора
+     * @param book сохраняемая книга
      * @return книга
      */
-    BookDto save(String title, String published, long genreId, long authorId);
+    BookDto saveOrUpdate(BookDto book);
 
     /**
      * Обновляет книгу

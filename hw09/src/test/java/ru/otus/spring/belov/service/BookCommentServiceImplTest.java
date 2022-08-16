@@ -37,7 +37,7 @@ class BookCommentServiceImplTest {
         var expectedBookComment = getBookCommentForSave();
         var commentBook = expectedBookComment.getBook();
         when(bookService.findById(commentBook.getId())).thenReturn(commentBook);
-        bookCommentService.save(expectedBookComment.getText(), commentBook.getId());
+        bookCommentService.save(expectedBookComment, commentBook.getId());
         verify(bookCommentRepository).save(argThat(actualSavedBookComment -> {
             assertThat(actualSavedBookComment)
                     .usingRecursiveComparison()

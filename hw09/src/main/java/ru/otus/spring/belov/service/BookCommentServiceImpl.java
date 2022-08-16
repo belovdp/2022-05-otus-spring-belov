@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.BookComment;
 import ru.otus.spring.belov.dto.BookCommentDto;
 import ru.otus.spring.belov.dto.mappers.BookCommentMapper;
+import ru.otus.spring.belov.exceptions.NotFoundException;
 import ru.otus.spring.belov.repositories.BookCommentRepository;
 
 import java.util.List;
@@ -26,12 +27,9 @@ public class BookCommentServiceImpl implements BookCommentService {
 
 
     @Override
-    public BookCommentDto save(String text, long bookId) {
+    public BookCommentDto save(BookComment bookComment, long bookId) {
         var book = bookService.findById(bookId);
-        var bookComment = BookComment.builder()
-                .text(text)
-                .book(book)
-                .build();
+        bookComment.setBook(book);
         return mapper.toDto(bookCommentRepository.save(bookComment));
     }
 
@@ -64,9 +62,8 @@ public class BookCommentServiceImpl implements BookCommentService {
         return mapper.toDto(findById(id));
     }
 
-    @Override
-    public BookComment findById(long id) {
+    private BookComment findById(long id) {
         return bookCommentRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %d", id)));
+                .orElseThrow(() -> new NotFoundException(format("Не найден автор с идентификатором %d", id)));
     }
 }

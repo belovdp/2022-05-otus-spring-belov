@@ -36,42 +36,42 @@ class BookServiceImplTest {
     @InjectMocks
     private BookServiceImpl bookService;
 
-    @DisplayName("Тест сохарения книги")
-    @Test
-    void saveTest() {
-        var expectedBook = getBookForSave();
-        var bookGenre = expectedBook.getGenre();
-        var bookAuthor = expectedBook.getAuthor();
-        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
-        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-        bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-        verify(bookRepository).save(argThat(actualSavedBook -> {
-            assertThat(actualSavedBook)
-                    .usingRecursiveComparison()
-                    .isEqualTo(expectedBook);
-            return true;
-        }));
-    }
-
-    @DisplayName("Тест обновления книги")
-    @Test
-    void updateTest() {
-        var expectedBook = getBookForSave();
-        expectedBook.setId(2L);
-        var bookGenre = expectedBook.getGenre();
-        var bookAuthor = expectedBook.getAuthor();
-        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
-        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-        when(bookRepository.findById(expectedBook.getId()))
-                .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
-        bookService.update(2, expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-        verify(bookRepository).save(argThat(actualSavedBook -> {
-            assertThat(actualSavedBook)
-                    .usingRecursiveComparison()
-                    .isEqualTo(expectedBook);
-            return true;
-        }));
-    }
+//    @DisplayName("Тест сохарения книги")
+//    @Test
+//    void saveTest() {
+//        var expectedBook = getBookForSave();
+//        var bookGenre = expectedBook.getGenre();
+//        var bookAuthor = expectedBook.getAuthor();
+//        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
+//        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
+//        bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
+//        verify(bookRepository).save(argThat(actualSavedBook -> {
+//            assertThat(actualSavedBook)
+//                    .usingRecursiveComparison()
+//                    .isEqualTo(expectedBook);
+//            return true;
+//        }));
+//    }
+//
+//    @DisplayName("Тест обновления книги")
+//    @Test
+//    void updateTest() {
+//        var expectedBook = getBookForSave();
+//        expectedBook.setId(2L);
+//        var bookGenre = expectedBook.getGenre();
+//        var bookAuthor = expectedBook.getAuthor();
+//        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
+//        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
+//        when(bookRepository.findById(expectedBook.getId()))
+//                .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
+//        bookService.update(2, expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
+//        verify(bookRepository).save(argThat(actualSavedBook -> {
+//            assertThat(actualSavedBook)
+//                    .usingRecursiveComparison()
+//                    .isEqualTo(expectedBook);
+//            return true;
+//        }));
+//    }
 
     @DisplayName("Тест поиска по идентификатору книги")
     @Test

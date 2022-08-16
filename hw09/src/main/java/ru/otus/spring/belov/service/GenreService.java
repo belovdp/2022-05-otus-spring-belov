@@ -1,6 +1,5 @@
 package ru.otus.spring.belov.service;
 
-import ru.otus.spring.belov.domain.Genre;
 import ru.otus.spring.belov.dto.GenreDto;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public interface GenreService {
      * Возвращает все жанры
      * @return список всех жанров
      */
-    List<GenreDto> findAll();
+    List<GenreDto> getAll();
 
     /**
      * Возвращает жанр по название
@@ -36,11 +35,4 @@ public interface GenreService {
      * @return жанр
      */
     GenreDto getById(long id);
-
-    /**
-     * Возвращает сущность жанра по идентификатору
-     * @param id идентификатор жанра
-     * @return жанр
-     */
-    Genre findById(long id);
 }

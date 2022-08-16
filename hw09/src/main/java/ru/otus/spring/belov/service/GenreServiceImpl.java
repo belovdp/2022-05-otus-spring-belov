@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.Genre;
 import ru.otus.spring.belov.dto.GenreDto;
 import ru.otus.spring.belov.dto.mappers.GenreMapper;
+import ru.otus.spring.belov.exceptions.NotFoundException;
 import ru.otus.spring.belov.repositories.GenreRepository;
 
 import java.util.List;
@@ -32,14 +33,14 @@ public class GenreServiceImpl implements GenreService {
     }
 
     @Override
-    public List<GenreDto> findAll() {
+    public List<GenreDto> getAll() {
         return mapper.toDto(genreRepository.findAll());
     }
 
     @Override
     public GenreDto getByName(String name) {
         return mapper.toDto(genreRepository.findByName(name)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с именем %s", name))));
+                .orElseThrow(() -> new NotFoundException(format("Не найден жанр с именем %s", name))));
     }
 
     @Override
@@ -47,9 +48,8 @@ public class GenreServiceImpl implements GenreService {
         return mapper.toDto(findById(id));
     }
 
-    @Override
-    public Genre findById(long id) {
+    private Genre findById(long id) {
         return genreRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException(format("Не найден жанр с идентификатором %d", id)));
+                .orElseThrow(() -> new NotFoundException(format("Не найден жанр с идентификатором %d", id)));
     }
 }
