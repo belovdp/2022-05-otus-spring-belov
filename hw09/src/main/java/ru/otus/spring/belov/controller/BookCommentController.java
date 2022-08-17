@@ -44,6 +44,6 @@ public class BookCommentController {
     @PostMapping("book/{bookId}/comment")
     public String save(@ModelAttribute @PathVariable Long bookId, BookComment comment) {
         commentService.save(comment, bookId);
-        return "redirect:/book/" + comment.getBook().getId() + "/view";
+        return "redirect:/book/" + bookId + "/view";
     }
 }
