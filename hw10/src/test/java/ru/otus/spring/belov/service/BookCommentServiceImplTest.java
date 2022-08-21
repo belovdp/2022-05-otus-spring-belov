@@ -10,6 +10,13 @@ import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.BookComment;
 import ru.otus.spring.belov.dto.mappers.BookCommentMapper;
 import ru.otus.spring.belov.repositories.BookCommentRepository;
+import ru.otus.spring.belov.repositories.BookRepository;
+
+import static java.util.Optional.of;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @DisplayName("Тест сервиса по работе с комментариями")
 @ExtendWith(MockitoExtension.class)
@@ -18,7 +25,7 @@ class BookCommentServiceImplTest {
     @Mock
     private BookCommentRepository bookCommentRepository;
     @Mock
-    private BookService bookService;
+    private BookRepository bookRepository;
     @Mock
     private BookCommentMapper mapper;
     @InjectMocks
@@ -27,16 +34,16 @@ class BookCommentServiceImplTest {
     @DisplayName("Тест сохарения книги")
     @Test
     void saveTest() {
-//        var expectedBookComment = getBookCommentForSave();
-//        var commentBook = expectedBookComment.getBook();
-//        when(bookService.findById(commentBook.getId())).thenReturn(commentBook);
-//        bookCommentService.save(expectedBookComment, commentBook.getId());
-//        verify(bookCommentRepository).save(argThat(actualSavedBookComment -> {
-//            assertThat(actualSavedBookComment)
-//                    .usingRecursiveComparison()
-//                    .isEqualTo(expectedBookComment);
-//            return true;
-//        }));
+        var expectedBookComment = getBookCommentForSave();
+        var commentBook = expectedBookComment.getBook();
+        when(bookRepository.findById(commentBook.getId())).thenReturn(of(commentBook));
+        bookCommentService.save(expectedBookComment, commentBook.getId());
+        verify(bookCommentRepository).save(argThat(actualSavedBookComment -> {
+            assertThat(actualSavedBookComment)
+                    .usingRecursiveComparison()
+                    .isEqualTo(expectedBookComment);
+            return true;
+        }));
     }
 
     private BookComment getBookCommentForSave() {

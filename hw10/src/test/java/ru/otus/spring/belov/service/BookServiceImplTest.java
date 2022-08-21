@@ -9,16 +9,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
 import ru.otus.spring.belov.domain.Genre;
+import ru.otus.spring.belov.dto.AuthorDto;
+import ru.otus.spring.belov.dto.BookDto;
+import ru.otus.spring.belov.dto.GenreDto;
 import ru.otus.spring.belov.dto.mappers.BookMapper;
 import ru.otus.spring.belov.exceptions.NotFoundException;
+import ru.otus.spring.belov.repositories.AuthorRepository;
 import ru.otus.spring.belov.repositories.BookRepository;
+import ru.otus.spring.belov.repositories.GenreRepository;
 
 import java.time.LocalDate;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.argThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,50 +35,26 @@ class BookServiceImplTest {
     @Mock
     private BookRepository bookRepository;
     @Mock
-    private GenreService genreService;
+    private GenreRepository genreRepository;
     @Mock
-    private AuthorService authorService;
+    private AuthorRepository authorRepository;
     @Mock
     private BookMapper mapper;
     @InjectMocks
     private BookServiceImpl bookService;
 
-//    @DisplayName("Тест сохарения книги")
-//    @Test
-//    void saveTest() {
-//        var expectedBook = getBookForSave();
-//        var bookGenre = expectedBook.getGenre();
-//        var bookAuthor = expectedBook.getAuthor();
-//        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
-//        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-//        bookService.save(expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-//        verify(bookRepository).save(argThat(actualSavedBook -> {
-//            assertThat(actualSavedBook)
-//                    .usingRecursiveComparison()
-//                    .isEqualTo(expectedBook);
-//            return true;
-//        }));
-//    }
-//
-//    @DisplayName("Тест обновления книги")
-//    @Test
-//    void updateTest() {
-//        var expectedBook = getBookForSave();
-//        expectedBook.setId(2L);
-//        var bookGenre = expectedBook.getGenre();
-//        var bookAuthor = expectedBook.getAuthor();
-//        when(genreService.findById(bookGenre.getId())).thenReturn(bookGenre);
-//        when(authorService.findById(bookAuthor.getId())).thenReturn(bookAuthor);
-//        when(bookRepository.findById(expectedBook.getId()))
-//                .thenReturn(of(Book.builder().id(expectedBook.getId()).build()));
-//        bookService.update(2, expectedBook.getTitle(), expectedBook.getPublished().toString(), bookGenre.getId(), bookAuthor.getId());
-//        verify(bookRepository).save(argThat(actualSavedBook -> {
-//            assertThat(actualSavedBook)
-//                    .usingRecursiveComparison()
-//                    .isEqualTo(expectedBook);
-//            return true;
-//        }));
-//    }
+    @DisplayName("Тест сохарения книги")
+    @Test
+    void saveTest() {
+        var expectedBook = getBookForSave();
+        var bookGenre = expectedBook.getGenre();
+        var bookAuthor = expectedBook.getAuthor();
+        when(genreRepository.findById(bookGenre.getId())).thenReturn(of(new Genre()));
+        when(authorRepository.findById(bookAuthor.getId())).thenReturn(of(new Author()));
+        when(mapper.fromDto(any())).thenReturn(new Book());
+        bookService.saveOrUpdate(expectedBook);
+        verify(bookRepository).save(any());
+    }
 
     @DisplayName("Тест поиска по идентификатору книги")
     @Test
@@ -85,10 +67,10 @@ class BookServiceImplTest {
                 .isInstanceOf(NotFoundException.class);
     }
 
-    private Book getBookForSave() {
-        var bookGenre = Genre.builder().id(1L).name("Фэнтези").build();
-        var bookAuthor = Author.builder().id(1L).name("Пупкин").birthday(LocalDate.now()).build();
-        return Book.builder()
+    private BookDto getBookForSave() {
+        var bookGenre = GenreDto.builder().id(1L).name("Фэнтези").build();
+        var bookAuthor = AuthorDto.builder().id(1L).name("Пупкин").build();
+        return BookDto.builder()
                 .title("testTitle")
                 .published(LocalDate.now())
                 .genre(bookGenre)
