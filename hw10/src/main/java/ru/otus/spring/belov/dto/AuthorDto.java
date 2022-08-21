@@ -22,7 +22,4 @@ public class AuthorDto {
 
     /** ФИО */
     private String name;
-
-    /** Дата рождения */
-    private LocalDate birthday;
 }

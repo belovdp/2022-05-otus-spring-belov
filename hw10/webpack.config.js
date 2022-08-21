@@ -132,7 +132,7 @@ module.exports = env => {
 
       new DefinePlugin({
         __VUE_OPTIONS_API: JSON.stringify(true),
-        VUE_PROD_DEVTOOLS: JSON.stringify(env.production !== true),
+        VUE_PROD_DEVTOOLS: JSON.stringify(env.production !== true)
       }),
     ]
   }

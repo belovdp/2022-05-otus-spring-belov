@@ -1,6 +1,8 @@
 package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Book;
@@ -12,9 +14,6 @@ import ru.otus.spring.belov.exceptions.NotFoundException;
 import ru.otus.spring.belov.repositories.AuthorRepository;
 import ru.otus.spring.belov.repositories.BookRepository;
 import ru.otus.spring.belov.repositories.GenreRepository;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import static java.lang.String.format;
 
@@ -45,18 +44,6 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookDto update(long id, String title, String published, long genreId, long authorId) {
-        var genre = getGenreById(genreId);
-        var author = getAuthorById(authorId);
-        var book = findById(id);
-        book.setTitle(title);
-        book.setPublished(LocalDate.parse(published));
-        book.setGenre(genre);
-        book.setAuthor(author);
-        return mapper.toDto(bookRepository.save(book));
-    }
-
-    @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
@@ -69,8 +56,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookDto> getAll() {
-        return mapper.toDto(bookRepository.findAll());
+    public Page<BookDto> getAll(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(mapper::toDto);
     }
 
     private Genre getGenreById(long id) {

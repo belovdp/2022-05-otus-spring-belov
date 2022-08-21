@@ -3,13 +3,21 @@ import { Component, Vue } from "vue-property-decorator";
 @Component({
     template: `
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/editor/1">Редактор документа</router-link> |
-      <router-link to="/editor/2">Другой редактор документа</router-link>
-    </nav>
-    <router-view :key="$route.path"/>
+    <el-menu
+      router
+      mode="horizontal"
+      background-color="#545c64"
+      text-color="#fff"
+      active-text-color="#ffd04b">
+      <el-menu-item index="/">Главная</el-menu-item>
+      <el-menu-item index="/book/editor/new">Добавить книгу</el-menu-item>
+    </el-menu>
+      
+    <el-container>
+      <el-main>
+        <router-view :key="$route.path"/>
+      </el-main>
+    </el-container>
   </div>
   `
 })

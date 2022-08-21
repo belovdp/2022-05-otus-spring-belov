@@ -23,7 +23,7 @@ module.exports = {
         // Отключаем for in для массивов
         "@typescript-eslint/no-for-in-array": "warn",
         // Не ставим await в return
-        "no-return-await": "warn",
+        "no-return-await": "off",
         // Никаких any
         "@typescript-eslint/no-explicit-any": "warn",
         // Настраиваем отступы
@@ -47,6 +47,7 @@ module.exports = {
         // Двойные кавычки
         "quotes": ["warn", "double"],
         // Проверка точек с запятой
-        "semi": ["warn", "always"]
+        "semi": ["warn", "always"],
+        "no-non-null-assertion": "off"
     }
 }

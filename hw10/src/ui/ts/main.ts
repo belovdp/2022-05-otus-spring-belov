@@ -2,11 +2,10 @@ import "@/style/styles.scss";
 import "@/style/img/favicon.ico";
 import "element-ui/lib/theme-chalk/index.css";
 import App from "@/ts/App";
-import {AxiosError} from "axios";
+import axios, {AxiosError} from "axios";
 import Element, {Notification} from "element-ui";
 import Vue from "vue";
 import router from "@/ts/config/router";
-import store from "@/ts/config/store";
 import locale from "element-ui/lib/locale/lang/ru-RU";
 
 Vue.config.productionTip = false;
@@ -37,6 +36,5 @@ function getErrorMessage(error: Error & AxiosError) {
 
 new Vue({
     router,
-    store,
     render: h => h(App)
 }).$mount("#app");
