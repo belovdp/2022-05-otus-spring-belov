@@ -1,47 +1,42 @@
 package ru.otus.spring.belov.domain;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Книга
  */
 @Builder
 @Data
-@ToString(exclude = "comments")
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "books")
-@NamedEntityGraph(name = "book-full", includeAllAttributes = true)
+@Document(collection = "books")
+@ToString(exclude = "comments")
 public class Book {
 
     /** Идентификатор */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     /** Название книги */
-    @Column(name = "title", nullable = false)
     private String title;
 
     /** Дата публикации книги */
-    @Column(name = "published", nullable = false)
     private LocalDate published;
 
     /** Жанр */
-    @ManyToOne
-    @JoinColumn(name = "genre_id")
+    @DBRef
     private Genre genre;
 
     /** Автор */
-    @ManyToOne
-    @JoinColumn(name = "author_id")
+    @DBRef
     private Author author;
 
-    @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
-    private List<BookComment> comments;
+    private Set<BookComment> comments = new HashSet<>();
 }

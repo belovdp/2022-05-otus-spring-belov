@@ -16,7 +16,7 @@ import java.util.List;
 public class BookWithCommentsDto {
 
     /** Идентификатор */
-    private Long id;
+    private String id;
 
     /** Название книги */
     private String title;

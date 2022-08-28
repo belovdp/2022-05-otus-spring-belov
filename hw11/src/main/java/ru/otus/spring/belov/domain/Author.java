@@ -1,10 +1,13 @@
 package ru.otus.spring.belov.domain;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Книжный автор
@@ -13,23 +16,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "authors")
+@Document(collection = "authors")
 public class Author {
 
     /** Идентификатор */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     /** ФИО */
-    @Column(name = "name", nullable = false)
     private String name;
 
     /** Дата рождения */
-    @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
-
-    @OneToMany(mappedBy = "author")
-    private List<Book> books;
 }

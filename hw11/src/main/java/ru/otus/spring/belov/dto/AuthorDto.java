@@ -3,7 +3,6 @@ package ru.otus.spring.belov.dto;
 import lombok.*;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
 /**
  * Книжный автор
@@ -18,7 +17,7 @@ public class AuthorDto {
 
     /** Идентификатор */
     @NotNull(message = "Жанр должен быть выбран")
-    private Long id;
+    private String id;
 
     /** ФИО */
     private String name;

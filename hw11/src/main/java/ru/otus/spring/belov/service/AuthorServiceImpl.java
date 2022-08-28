@@ -2,11 +2,13 @@ package ru.otus.spring.belov.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.belov.dto.AuthorDto;
-import ru.otus.spring.belov.dto.mappers.AuthorMapper;
+import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.repositories.AuthorRepository;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import static java.lang.String.format;
 
 /**
  * Сервис по работе с автоарми
@@ -17,11 +19,29 @@ public class AuthorServiceImpl implements AuthorService {
 
     /** Репозиторий По работе с авторами */
     private final AuthorRepository authorRepository;
-    /** Преобразователь сущностей в DTO */
-    private final AuthorMapper mapper;
 
     @Override
-    public List<AuthorDto> getAll() {
-        return mapper.toDto(authorRepository.findAll());
+    public Author save(String name, String birthday) {
+        var author = Author.builder()
+                .name(name)
+                .birthday(LocalDate.parse(birthday))
+                .build();
+        return authorRepository.save(author);
+    }
+
+    @Override
+    public List<Author> findAll() {
+        return authorRepository.findAll();
+    }
+
+    @Override
+    public List<Author> findByNameContaining(String name) {
+        return authorRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    @Override
+    public Author findById(String id) {
+        return authorRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(format("Не найден автор с идентификатором %s", id)));
     }
 }

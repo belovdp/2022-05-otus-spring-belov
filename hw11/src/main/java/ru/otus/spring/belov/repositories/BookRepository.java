@@ -1,23 +1,31 @@
 package ru.otus.spring.belov.repositories;
 
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.mongodb.lang.NonNull;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import ru.otus.spring.belov.domain.Book;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Репозиторий по работе с книгами
  */
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends MongoRepository<Book, String>, CustomBookRepository {
+
 
     /**
-     * Возвращает книгу по идентификатору, подгружая все связи
-     * @param id идентификатор книги
-     * @return книга со всеми прогруженными связями
+     * Возвращает все книги без комментариев
+     * @return список всех книг без комментариев
      */
-    @EntityGraph(value = "book-full")
-    @Override
-    Optional<Book> findById(Long id);
+    @Query(value = "{}", fields = "{'comments' : 0}")
+    @NonNull
+    List<Book> findAll();
+
+    /**
+     * Возвращает все книги по идентификатору жанра без комментариев
+     * @param genreName название жанра
+     * @return список всех книг по жанру без комментариев
+     */
+    @Query(fields = "{'comments' : 0}")
+    List<Book> findAllByGenreId(String genreName);
 }

@@ -1,9 +1,8 @@
 package ru.otus.spring.belov.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import ru.otus.spring.belov.dto.BookDto;
-import ru.otus.spring.belov.dto.BookWithCommentsDto;
+import ru.otus.spring.belov.domain.Book;
+
+import java.util.List;
 
 /**
  * Сервис по работе с книгами
@@ -12,27 +11,48 @@ public interface BookService {
 
     /**
      * Сохраняет книгу
-     * @param book сохраняемая книга
+     * @param title     название книги
+     * @param published дата публикации
+     * @param genreId   идентификатор жанра
+     * @param authorId  идентификатор автора
      * @return книга
      */
-    BookDto saveOrUpdate(BookDto book);
+    Book save(String title, String published, String genreId, String authorId);
+
+    /**
+     * Обновляет книгу
+     * @param id        идентификатор записи
+     * @param title     название книги
+     * @param published дата публикации
+     * @param genreId   идентификатор жанра
+     * @param authorId  идентификатор автора
+     * @return книга
+     */
+    Book update(String id, String title, String published, String genreId, String authorId);
 
     /**
      * Удаляет книгу по идентификатору
      * @param id идентификатор книги
      */
-    void deleteById(long id);
+    void deleteById(String id);
 
     /**
      * Возвращает книгу по идентификатору
      * @param id идентификатор книги
      * @return книга
      */
-    BookWithCommentsDto getById(long id);
+    Book findById(String id);
 
     /**
      * Возвращает все книги
      * @return список всех книг
      */
-    Page<BookDto> getAll(Pageable pageable);
+    List<Book> findAll();
+
+    /**
+     * Возвращает все книги по названию жанра
+     * @param genreName название жанра
+     * @return список всех книг по жанру
+     */
+    List<Book> findAllByGenreName(String genreName);
 }

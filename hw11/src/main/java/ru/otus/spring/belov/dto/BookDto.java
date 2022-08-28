@@ -20,7 +20,7 @@ import java.time.LocalDate;
 public class BookDto {
 
     /** Идентификатор */
-    private Long id;
+    private String id;
 
     /** Название книги */
     @NotBlank(message = "Название не может быть пустым")

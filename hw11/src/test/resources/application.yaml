@@ -1,12 +1,14 @@
 spring:
-  datasource:
-    url: jdbc:h2:mem:library
-  liquibase:
-    change-log: classpath:liquibase/main.xml
-    contexts: test
-  main:
-    allow-circular-references: true
-  jpa:
-    generate-ddl: false
-    hibernate:
-      ddl-auto: none
+  data:
+    mongodb:
+      database: library
+      host: localhost
+      port: 0
+  mongodb:
+    embedded:
+      version: 3.4.0
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.belov.mongock.changelog

@@ -1,8 +1,12 @@
 package ru.otus.spring.belov.domain;
 
-import lombok.*;
-
-import javax.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * Комментарий для книги
@@ -11,22 +15,22 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@ToString(exclude = "book")
-@Table(name = "book_comments")
+@Document
 public class BookComment {
 
     /** Идентификатор */
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
     /** Комментарий */
-    @Column(name = "text", nullable = false)
     private String text;
 
-    /** Комментируемая книга */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
-    private Book book;
+    /**
+     * Конструктор
+     * @param text текст комментария
+     */
+    public BookComment(String text) {
+        this.id = new ObjectId().toString();
+        this.text = text;
+    }
 }

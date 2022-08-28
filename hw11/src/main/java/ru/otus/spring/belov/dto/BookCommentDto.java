@@ -13,7 +13,7 @@ import lombok.ToString;
 public class BookCommentDto {
 
     /** Идентификатор */
-    private Long id;
+    private String id;
 
     /** Комментарий */
     private String text;

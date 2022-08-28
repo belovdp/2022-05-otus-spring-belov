@@ -17,7 +17,7 @@ public class GenreDto {
 
     /** Идентификатор */
     @NotNull(message = "Жанр должен быть выбран")
-    private Long id;
+    private String id;
 
     /** Название жанра */
     private String name;
