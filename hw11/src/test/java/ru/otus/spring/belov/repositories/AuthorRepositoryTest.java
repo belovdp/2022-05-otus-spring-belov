@@ -1,18 +1,19 @@
 package ru.otus.spring.belov.repositories;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 import ru.otus.spring.belov.domain.Author;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Тест репозитория для работы с авторами")
 @DataMongoTest
@@ -28,48 +29,50 @@ class AuthorRepositoryTest {
     @DisplayName("Тестирует сохранение записи")
     @Test
     void saveTest() {
-//        Author expectedAuthor = Author.builder().name("test").birthday(LocalDate.now()).build();
-//        authorRepository.save(expectedAuthor);
-//        Optional<Author> actualAuthor = authorRepository.findById(expectedAuthor.getId());
-//        assertTrue(actualAuthor.isPresent(), "Не найден автор");
-//        assertThat(actualAuthor.get()).usingRecursiveComparison().isEqualTo(expectedAuthor);
+        Author expectedAuthor = Author.builder().name("test").birthday(LocalDate.now()).build();
+        Mono<Author> monoExpectedAuthor = authorRepository.save(expectedAuthor)
+                .flatMap(author -> authorRepository.findById(author.getId()));
+        StepVerifier
+                .create(monoExpectedAuthor)
+                .assertNext(Assertions::assertNotNull)
+                .thenRequest(1)
+                .assertNext(Assertions::assertNull)
+                .expectComplete()
+                .verify();
     }
 
     @DisplayName("Тестирует поиск списка записей")
     @Test
     void findAllTest() {
-//        Author expectedAuthor = Author.builder()
-//                .id(EXISTING_AUTHOR_ID)
-//                .name(EXISTING_AUTHOR_NAME)
-//                .birthday(EXISTING_AUTHOR_BIRTHDAY)
-//                .build();
-//        List<Author> actualAuthorList = authorRepository.findAll();
-//        assertThat(actualAuthorList)
-//                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
-//                .contains(expectedAuthor);
-    }
-
-    @DisplayName("Тестирует поиск записи по имени автора")
-    @Test
-    void findByNameContainingTest() {
-//        var authors = authorRepository.findByNameContainingIgnoreCase("орд");
-//        assertEquals(1, authors.size());
-//        assertEquals("2", authors.get(0).getId());
-//        authors = authorRepository.findByNameContainingIgnoreCase("ев");
-//        assertEquals(2, authors.size());
-//        assertTrue(List.of("1", "3").containsAll(authors.stream().map(Author::getId).toList()));
+        Author expectedAuthor = Author.builder()
+                .id(EXISTING_AUTHOR_ID)
+                .name(EXISTING_AUTHOR_NAME)
+                .birthday(EXISTING_AUTHOR_BIRTHDAY)
+                .build();
+        StepVerifier
+                .create(authorRepository.findAll())
+                .recordWith(ArrayList::new)
+                .thenConsumeWhile(x -> true)  // Predicate on elements
+                .consumeRecordedWith(actualAuthorList ->
+                        assertThat(actualAuthorList)
+                                .usingDefaultElementComparator()
+                                .contains(expectedAuthor))
+                .verifyComplete();
     }
 
     @DisplayName("Тестирует поиск записи по id")
     @Test
     void findByIdTest() {
-//        Author expectedAuthor = Author.builder()
-//                .id(EXISTING_AUTHOR_ID)
-//                .name(EXISTING_AUTHOR_NAME)
-//                .birthday(EXISTING_AUTHOR_BIRTHDAY)
-//                .build();
-//        Optional<Author> actualAuthor = authorRepository.findById(expectedAuthor.getId());
-//        assertTrue(actualAuthor.isPresent(), "Не найден автор");
-//        assertThat(actualAuthor.get()).usingRecursiveComparison().isEqualTo(expectedAuthor);
+        Author expectedAuthor = Author.builder()
+                .id(EXISTING_AUTHOR_ID)
+                .name(EXISTING_AUTHOR_NAME)
+                .birthday(EXISTING_AUTHOR_BIRTHDAY)
+                .build();
+        Mono<Author> monoActualAuthor = authorRepository.findById(expectedAuthor.getId());
+        StepVerifier
+                .create(monoActualAuthor)
+                .expectNext(expectedAuthor)
+                .expectComplete()
+                .verify();
     }
 }
