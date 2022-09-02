@@ -16,8 +16,8 @@ import {Inject} from "typescript-ioc";
                       empty-text="Данные отсутствуют или не загружены">
         <el-table-column prop="id" label="ID" width="100" sortable="custom"></el-table-column>
         <el-table-column prop="title" label="Название" sortable="custom"></el-table-column>
-        <el-table-column prop="author.name" label="Автор" sortable="custom"></el-table-column>
-        <el-table-column prop="genre.name" label="Жанр" sortable="custom"></el-table-column>
+        <el-table-column prop="author.name" column-key="author.id" label="Автор" sortable="custom"></el-table-column>
+        <el-table-column prop="genre.name" column-key="genre.id" label="Жанр" sortable="custom"></el-table-column>
         <el-table-column
           label="Действия"
           width="320">

@@ -1,23 +1,32 @@
 package ru.otus.spring.belov.controller;
 
 import lombok.RequiredArgsConstructor;
-import ru.otus.spring.belov.service.AuthorService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import ru.otus.spring.belov.dto.AuthorDto;
+import ru.otus.spring.belov.dto.mappers.AuthorMapper;
+import ru.otus.spring.belov.repositories.AuthorRepository;
 
 /**
  * Контроллер для работы с авторами
  */
+@RestController
 @RequiredArgsConstructor
 public class AuthorController {
 
-    /** Сервис с авторами */
-    private final AuthorService authorService;
+    /** Репозиторий работы с авторами */
+    private final AuthorRepository authorRepository;
+    /** Маппер для работы с авторами */
+    private final AuthorMapper authorMapper;
 
     /**
      * Возвращает список авторов
-     * @return
+     * @return авторы
      */
-//    @GetMapping("/authors")
-//    public List<AuthorDto> getAuthors() {
-//        return authorService.getAll();
-//    }
+    @GetMapping("/authors")
+    public Flux<AuthorDto> getAuthors() {
+        return authorRepository.findAll()
+                .map(authorMapper::toDto);
+    }
 }

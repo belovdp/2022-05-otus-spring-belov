@@ -6,6 +6,9 @@ import ru.otus.spring.belov.dto.AuthorDto;
 
 import java.util.List;
 
+/**
+ * Конвертер DTO <-> DO для авторов
+ */
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
    AuthorDto toDto(Author author);

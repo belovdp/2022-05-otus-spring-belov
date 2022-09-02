@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Инициализация БД
+ */
 @ChangeLog(order = "001")
 public class DatabaseChangelog {
 

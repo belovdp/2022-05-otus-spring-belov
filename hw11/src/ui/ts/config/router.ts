@@ -18,7 +18,7 @@ const routes: Array<RouteConfig> = [
         component: BookView
     },
     {
-        path: "/book/editor/:id(\\d+|new)",
+        path: "/book/editor/:id",
         name: "bookForm",
         component: BookForm
     }

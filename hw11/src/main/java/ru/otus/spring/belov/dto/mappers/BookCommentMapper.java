@@ -6,6 +6,9 @@ import ru.otus.spring.belov.dto.BookCommentDto;
 
 import java.util.List;
 
+/**
+ * Конвертер DTO <-> DO для комментариев
+ */
 @Mapper(componentModel = "spring")
 public interface BookCommentMapper {
    BookCommentDto toDto(BookComment bookComment);

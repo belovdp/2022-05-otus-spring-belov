@@ -1,16 +1,16 @@
 package ru.otus.spring.belov.repositories;
 
 import com.mongodb.lang.NonNull;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.Query;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import reactor.core.publisher.Flux;
 import ru.otus.spring.belov.domain.Book;
-
-import java.util.List;
 
 /**
  * Репозиторий по работе с книгами
  */
-public interface BookRepository extends MongoRepository<Book, String>, CustomBookRepository {
+public interface BookRepository extends ReactiveMongoRepository<Book, String> {
 
 
     /**
@@ -19,13 +19,5 @@ public interface BookRepository extends MongoRepository<Book, String>, CustomBoo
      */
     @Query(value = "{}", fields = "{'comments' : 0}")
     @NonNull
-    List<Book> findAll();
-
-    /**
-     * Возвращает все книги по идентификатору жанра без комментариев
-     * @param genreName название жанра
-     * @return список всех книг по жанру без комментариев
-     */
-    @Query(fields = "{'comments' : 0}")
-    List<Book> findAllByGenreId(String genreName);
+    Flux<Book> findAll(final Pageable page);
 }

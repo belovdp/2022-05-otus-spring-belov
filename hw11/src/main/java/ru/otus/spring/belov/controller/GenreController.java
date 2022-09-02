@@ -1,23 +1,32 @@
 package ru.otus.spring.belov.controller;
 
 import lombok.RequiredArgsConstructor;
-import ru.otus.spring.belov.service.GenreService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import ru.otus.spring.belov.dto.GenreDto;
+import ru.otus.spring.belov.dto.mappers.GenreMapper;
+import ru.otus.spring.belov.repositories.GenreRepository;
 
 /**
  * Контроллер для работы с жанрами
  */
+@RestController
 @RequiredArgsConstructor
 public class GenreController {
 
-    /** Сервис по работе с жанрами */
-    private final GenreService genreService;
+    /** Репозиторий по работе с жанрами */
+    private final GenreRepository genreRepository;
+    /** Маппер для работы с жанрами */
+    private final GenreMapper genreMapper;
 
     /**
      * Возвращает список жанров
      * @return жанры
      */
-//    @GetMapping("/genres")
-//    public List<GenreDto> getGenres() {
-//        return genreService.getAll();
-//    }
+    @GetMapping("/genres")
+    public Flux<GenreDto> getGenres() {
+        return genreRepository.findAll()
+                .map(genreMapper::toDto);
+    }
 }

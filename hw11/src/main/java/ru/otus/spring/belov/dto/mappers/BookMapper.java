@@ -7,6 +7,9 @@ import ru.otus.spring.belov.dto.BookWithCommentsDto;
 
 import java.util.List;
 
+/**
+ * Конвертер DTO <-> DO для книги
+ */
 @Mapper(componentModel = "spring", uses = {AuthorMapper.class, GenreMapper.class})
 public interface BookMapper {
     BookDto toDto(Book book);

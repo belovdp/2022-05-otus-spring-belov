@@ -1,13 +1,14 @@
 package ru.otus.spring.belov.dto.mappers;
 
 import org.mapstruct.Mapper;
-import ru.otus.spring.belov.domain.Author;
 import ru.otus.spring.belov.domain.Genre;
-import ru.otus.spring.belov.dto.AuthorDto;
 import ru.otus.spring.belov.dto.GenreDto;
 
 import java.util.List;
 
+/**
+ * Конвертер DTO <-> DO для жанров
+ */
 @Mapper(componentModel = "spring")
 public interface GenreMapper {
    GenreDto toDto(Genre genre);
