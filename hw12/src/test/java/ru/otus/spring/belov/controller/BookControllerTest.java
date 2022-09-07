@@ -6,6 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.otus.spring.belov.dto.AuthorDto;
@@ -37,10 +39,13 @@ class BookControllerTest {
     private GenreService genreService;
     @MockBean
     private AuthorService authorService;
+    @MockBean
+    private UserDetailsService userDetailsService;
     @Autowired
     private MockMvc mockMvc;
 
     @DisplayName("Тест отображения формы с книгой")
+    @WithMockUser(username = "user")
     @Test
     void showById() throws Exception {
         var book = new BookWithCommentsDto(2L, "sdf", LocalDate.now(), new GenreDto(), new AuthorDto(), new ArrayList<>());
@@ -52,6 +57,7 @@ class BookControllerTest {
     }
 
     @DisplayName("Тест отображения формы новой книги")
+    @WithMockUser(username = "user")
     @Test
     void newBook() throws Exception {
         var authors = List.of(new AuthorDto());
@@ -66,6 +72,7 @@ class BookControllerTest {
     }
 
     @DisplayName("Тест отображения формы  изменения книги")
+    @WithMockUser(username = "user")
     @Test
     void updateBook() throws Exception {
         var authors = List.of(new AuthorDto());
@@ -83,6 +90,7 @@ class BookControllerTest {
     }
 
     @DisplayName("Тест удаления книги")
+    @WithMockUser(username = "user")
     @Test
     void deleteById() throws Exception {
         mockMvc.perform(get("/book/{id}/delete", 2))

@@ -26,8 +26,7 @@ public class BookCommentController {
      * @param model модель данных
      * @return форма добавления комментария
      */
-    @GetMapping
-    @RequestMapping("book/{bookId}/comment/new")
+    @GetMapping("book/{bookId}/comment/new")
     public String newComment(@PathVariable Long bookId, Model model) {
         bookService.getById(bookId);
         model.addAttribute("bookId", bookId);
