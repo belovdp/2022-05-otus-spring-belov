@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="blocks/header :: head">
+        <title>Внутренняя ошибка сервера</title>
+    </head>
+    <body>
+        <div th:replace="blocks/header :: header"></div>
+        <div class="container mt-5">
+            <h1>Внутренняя ошибка сервера</h1>
+            <p th:text="${exception.getMessage()}"></p>
+        </div>
+    </body>
+</html>
