@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      database: library
+      host: localhost
+      port: 0
+  mongodb:
+    embedded:
+      version: 3.4.0
+
+mongock:
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.belov.mongock.changelog
