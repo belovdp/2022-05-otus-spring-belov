@@ -57,7 +57,7 @@ class BookControllerTest {
     }
 
     @DisplayName("Тест отображения формы новой книги")
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = "ADMIN")
     @Test
     void newBook() throws Exception {
         var authors = List.of(new AuthorDto());
@@ -72,7 +72,7 @@ class BookControllerTest {
     }
 
     @DisplayName("Тест отображения формы  изменения книги")
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = "ADMIN")
     @Test
     void updateBook() throws Exception {
         var authors = List.of(new AuthorDto());
@@ -90,7 +90,7 @@ class BookControllerTest {
     }
 
     @DisplayName("Тест удаления книги")
-    @WithMockUser(username = "user")
+    @WithMockUser(username = "user", roles = "ADMIN")
     @Test
     void deleteById() throws Exception {
         mockMvc.perform(get("/book/{id}/delete", 2))

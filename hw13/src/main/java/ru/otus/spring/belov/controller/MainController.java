@@ -3,6 +3,7 @@ package ru.otus.spring.belov.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.otus.spring.belov.service.BookService;
 
@@ -25,5 +26,14 @@ public class MainController {
     public String getIndexPage(Model model) {
         model.addAttribute("books", bookService.getAll());
         return "index";
+    }
+
+    /**
+     * Страница об отсутсвии доступа
+     * @return страница об отсутствии доступа
+     */
+    @GetMapping("/403")
+    public String error403() {
+        return "/403";
     }
 }
