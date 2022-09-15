@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:include="blocks/header :: head">
+        <title>Главная страница</title>
+    </head>
+    <body>
+        <div th:replace="blocks/header :: header"></div>
+        <div class="container mt-5">
+            <h1>Библиотека</h1>
+            <div class="table" th:if="${not #lists.isEmpty(books)}">
+                <table class="table table-bordered">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Автор</th>
+                        <th>Жанр</th>
+                        <th>Просмотре</th>
+                        <th>Обновление</th>
+                        <th>Удаление</th>
+                    </tr>
+                    </thead>
+                    <tr th:remove="all">
+                        <td>1</td>
+                        <td>Книжка</td>
+                        <td>Пушкин</td>
+                        <td>Роман</td>
+                        <td><a href="#">Просмотр</a></td>
+                        <td><a href="#">Изменить</a></td>
+                        <td><a href="#">Удалить</a></td>
+                    </tr>
+                    <tr th:each="book : ${books}">
+                        <td th:text="${book.id}">33</td>
+                        <td th:text="${book.title}">Крутая книга</td>
+                        <td th:text="${book.author.name}">Лермонтов</td>
+                        <td th:text="${book.genre.name}">Стихи</td>
+                        <td><a href="#" th:href="@{'/book/' + ${book.id} + '/view'}">Просмотр</a></td>
+                        <td><a href="#" th:href="@{'/book/' + ${book.id} + '/update'}">Изменить</a></td>
+                        <td><a href="#" th:href="@{'/book/' + ${book.id} + '/delete'}">Удалить</a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
