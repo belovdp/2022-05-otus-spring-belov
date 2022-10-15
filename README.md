@@ -157,3 +157,12 @@
 3. Реализовать свой собственный HealthCheck индикатор
 4. UI для данных от Spring Boot Actuator реализовывать не нужно.
 5. Опционально: переписать приложение на HATEOAS принципах с помощью Spring Data REST Repository
+
+---
+#### ДЗ 18
+#### [Обернуть внешние вызовы в Hystrix](https://github.com/belovdp/2022-05-otus-spring-belov/tree/dev/hw18)
+1. Обернуть все внешние вызовы в Hystrix, Hystrix Javanica.
+2. Возможно использование Resilent4j
+3. Возможно использование Feign Client \
+   Опционально: Поднять Turbine Dashboard для мониторинга.\
+   Данное задание НЕ засчитывает предыдущие!
