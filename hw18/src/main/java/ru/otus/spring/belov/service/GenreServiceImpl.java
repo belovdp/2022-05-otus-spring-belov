@@ -1,5 +1,6 @@
 package ru.otus.spring.belov.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.dto.GenreDto;
@@ -20,6 +21,7 @@ public class GenreServiceImpl implements GenreService {
     /** Преобразователь сущностей в DTO */
     private final GenreMapper mapper;
 
+    @HystrixCommand
     @Override
     public List<GenreDto> getAll() {
         return mapper.toDto(genreRepository.findAll());

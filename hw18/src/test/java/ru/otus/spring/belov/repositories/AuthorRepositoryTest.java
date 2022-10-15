@@ -46,7 +46,8 @@ class AuthorRepositoryTest {
                 .build();
         List<Author> actualAuthorList = authorRepository.findAll();
         assertThat(actualAuthorList)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
+                .usingRecursiveFieldByFieldElementComparator()
+                .usingElementComparatorIgnoringFields("books")
                 .contains(expectedAuthor);
         assertEquals(4, actualAuthorList.size(), "Неверное количество записей");
     }

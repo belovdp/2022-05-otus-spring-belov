@@ -87,7 +87,8 @@ class BookCommentRepositoryTest {
                 .build();
         List<BookComment> actualBookList = bookCommentRepository.findAll();
         assertThat(actualBookList)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("book")
+                .usingRecursiveFieldByFieldElementComparator()
+                .usingElementComparatorIgnoringFields("book")
                 .contains(expectedBookComment);
         assertEquals(11, actualBookList.size(), "Неверное количество записей");
     }

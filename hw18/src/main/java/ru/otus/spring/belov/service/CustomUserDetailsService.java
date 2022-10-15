@@ -1,6 +1,8 @@
 package ru.otus.spring.belov.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     /** Репозиторий по работе с пользователями */
     private final UserRepository userRepository;
 
+    @HystrixCommand(ignoreExceptions = { AuthenticationException.class })
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(name)

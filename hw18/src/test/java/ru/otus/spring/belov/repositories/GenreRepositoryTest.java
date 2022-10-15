@@ -43,7 +43,8 @@ class GenreRepositoryTest {
                 .build();
         List<Genre> actualGenreList = genreRepository.findAll();
         assertThat(actualGenreList)
-                .usingRecursiveFieldByFieldElementComparatorIgnoringFields("books")
+                .usingRecursiveFieldByFieldElementComparator()
+                .usingElementComparatorIgnoringFields("books")
                 .contains(expectedGenre);
         assertEquals(5, actualGenreList.size(), "Неверное количество записей");
     }

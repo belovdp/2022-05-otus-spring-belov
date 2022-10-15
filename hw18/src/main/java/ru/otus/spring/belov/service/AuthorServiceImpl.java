@@ -1,5 +1,6 @@
 package ru.otus.spring.belov.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.dto.AuthorDto;
@@ -20,6 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
     /** Преобразователь сущностей в DTO */
     private final AuthorMapper mapper;
 
+    @HystrixCommand
     @Override
     public List<AuthorDto> getAll() {
         return mapper.toDto(authorRepository.findAll());

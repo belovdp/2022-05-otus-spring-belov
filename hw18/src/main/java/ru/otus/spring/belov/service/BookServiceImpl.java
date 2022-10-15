@@ -1,5 +1,6 @@
 package ru.otus.spring.belov.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.belov.domain.Author;
@@ -34,6 +35,7 @@ public class BookServiceImpl implements BookService {
     /** Преобразователь сущностей в DTO */
     private final BookMapper mapper;
 
+    @HystrixCommand(ignoreExceptions = { NotFoundException.class })
     @Override
     public BookDto saveOrUpdate(BookDto bookDto) {
         var genre = getGenreById(bookDto.getGenre().getId());
@@ -44,6 +46,7 @@ public class BookServiceImpl implements BookService {
         return mapper.toDto(bookRepository.save(book));
     }
 
+    @HystrixCommand(ignoreExceptions = { NotFoundException.class })
     @Override
     public BookDto update(long id, String title, String published, long genreId, long authorId) {
         var genre = getGenreById(genreId);
@@ -56,11 +59,13 @@ public class BookServiceImpl implements BookService {
         return mapper.toDto(bookRepository.save(book));
     }
 
+    @HystrixCommand
     @Override
     public void deleteById(long id) {
         bookRepository.deleteById(id);
     }
 
+    @HystrixCommand(ignoreExceptions = { NotFoundException.class })
     @Override
     public BookWithCommentsDto getById(long id) {
         var book = bookRepository.findById(id)
@@ -68,6 +73,7 @@ public class BookServiceImpl implements BookService {
         return mapper.toDtoWithComments(book);
     }
 
+    @HystrixCommand
     @Override
     public List<BookDto> getAll() {
         return mapper.toDto(bookRepository.findAll());

@@ -38,3 +38,11 @@ management:
       enabled: true
   health:
     defaults:
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 300
