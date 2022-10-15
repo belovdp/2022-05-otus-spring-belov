@@ -148,3 +148,12 @@
 1. Выберите другую доменную область и сущности. Пример: превращение гусеницы в бабочку.
 2. Опишите/сконфигурируйте процесс (IntegrationFlow) с помощью инструментария предоставляемого Spring Integration.
 3. Желательно использование MessagingGateway и subfolw (при необходимости).
+
+---
+#### ДЗ 16
+#### [Использовать метрики, healthchecks и logfile](https://github.com/belovdp/2022-05-otus-spring-belov/tree/dev/hw16)
+1. Подключить Spring Boot Actuator в приложение.
+2. Включить метрики, healthchecks и logfile.
+3. Реализовать свой собственный HealthCheck индикатор
+4. UI для данных от Spring Boot Actuator реализовывать не нужно.
+5. Опционально: переписать приложение на HATEOAS принципах с помощью Spring Data REST Repository
