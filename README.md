@@ -143,6 +143,13 @@
 5. Опционально: Сделать restart задачи с помощью Spring Shell.
 
 ---
+#### ДЗ 15
+#### [Реализовать обработку доменной сущности через каналы Spring Integration](https://github.com/belovdp/2022-05-otus-spring-belov/tree/dev/hw15)
+1. Выберите другую доменную область и сущности. Пример: превращение гусеницы в бабочку.
+2. Опишите/сконфигурируйте процесс (IntegrationFlow) с помощью инструментария предоставляемого Spring Integration.
+3. Желательно использование MessagingGateway и subfolw (при необходимости).
+
+---
 #### ДЗ 16
 #### [Использовать метрики, healthchecks и logfile](https://github.com/belovdp/2022-05-otus-spring-belov/tree/dev/hw16)
 1. Подключить Spring Boot Actuator в приложение.
