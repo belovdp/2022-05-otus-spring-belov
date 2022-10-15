@@ -1,6 +1,11 @@
 spring:
+  application:
+    name: library
   datasource:
-    url: jdbc:h2:mem:library
+    url: jdbc:postgresql://localhost:5433/library
+    username: postgres
+    password: owner
+    driver-class-name: org.postgresql.Driver
   liquibase:
     change-log: classpath:liquibase/main.xml
     contexts: prod
@@ -8,6 +13,9 @@ spring:
     generate-ddl: false
     hibernate:
       ddl-auto: none
+
+server:
+  port: 8099
 
 logging:
   level:
