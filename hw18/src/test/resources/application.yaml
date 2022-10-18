@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: library
+  datasource:
+    url: jdbc:h2:mem:library
+  liquibase:
+    change-log: classpath:liquibase/main.xml
+    contexts: test
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8099
+
+logging:
+  level:
+    ROOT: INFO
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+  file:
+    name: "./logs/application.log"
+  pattern:
+    file: "%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level [%thread] %logger{15} - %msg%n"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,logfile
+  endpoint:
+    health:
+      show-details: always
+    logfile:
+      enabled: true
+  health:
+    defaults:
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 300
